@@ -58,7 +58,7 @@ goto for_end
 	
 		call set tempPath=%%path:%java_home%=%success:~1,-1%%%
 		
-		#rem loop to access local vars in gloabl enviroment
+		rem loop to access local vars in gloabl enviroment
 		for /F "delims=" %%E in (""!tempPath!"") do (
 			endlocal
 			
@@ -91,8 +91,8 @@ goto for_end
 	goto exit
 
 :help
-	echo \"jenv add <name> <javaPath to JAVA_HOME>\" adds a new java version
-	echo \"jenv use <name>\" changes the java_home and path for the current session
-	echo \"jenv change <name>\" changes the java_home and path permanently
+	echo "jenv add <name> <javaPath to JAVA_HOME>" adds a new java version
+	echo "jenv use <name>" changes the java_home and path for the current session
+	echo "jenv change <name>" changes the java_home and path permanently
 
 :exit
