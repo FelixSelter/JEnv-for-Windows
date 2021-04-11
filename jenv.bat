@@ -64,7 +64,8 @@ goto for_end
 		for /F "delims=" %%E in (""!tempPath!"") do (
 			endlocal
 			
-			if %permanently% == TRUE powershell.exe "[Environment]::SetEnvironmentVariable('path','%%~E','User');" rem use powershell and not setx to bypass the path limit
+			rem use powershell and not setx to bypass the path limit
+			if %permanently% == TRUE powershell.exe "[Environment]::SetEnvironmentVariable('path','%%~E','User');" 
 			
 			set path=%%~E
 
