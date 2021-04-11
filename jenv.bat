@@ -58,7 +58,8 @@ goto for_end
 	rem success is the retrieved path of the name
 	if defined success (
 	
-		call set tempPath=%%path:%java_home%=%success:~1,-1%%%
+		for /F "skip=2 tokens=1,2*" %%N in ('%SystemRoot%\System32\reg.exe query "HKCU\Environment" /v "Path" 2^>nul') do if /I "%%N" == "Path" call set "UserPath=%%P"
+		call set tempPath=%%UserPath:%java_home%=%success:~1,-1%%%
 		
 		rem loop to access local vars in gloabl enviroment
 		for /F "delims=" %%E in (""!tempPath!"") do (
