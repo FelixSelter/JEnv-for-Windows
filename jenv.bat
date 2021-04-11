@@ -34,8 +34,10 @@ if "%1" EQU "/?" goto help
 	if %argC% NEQ 2 echo "Systax error: jenv use <name>"
 	set toUse=%2
 
-setlocal EnableDelayedExpansion rem need local to wait for the for loop vars
-FOR /F "usebackq" %%i in ("%~dp0jenv.config") DO set line=%%i& call :for_loop rem needs while loop but cant use goto without breaking the for loop. So a sub-process is used
+rem need local to wait for the for loop vars
+setlocal EnableDelayedExpansion 
+rem needs while loop but cant use goto without breaking the for loop. So a sub-process is used
+FOR /F "usebackq" %%i in ("%~dp0jenv.config") DO set line=%%i& call :for_loop 
 goto for_end
 :for_loop
 	set javaPath=!line!
