@@ -36,12 +36,13 @@ if "%1" EQU "/?" goto help
 rem need local to wait for the for loop vars
 setlocal EnableDelayedExpansion 
 rem needs while loop but cant use goto without breaking the for loop. So a sub-process is used
-FOR /F "usebackq" %%i in ("%~dp0jenv.config") DO set line=%%i& call :for_loop 
+FOR /F "usebackq delims=" %%i in ("%~dp0jenv.config") DO set line=%%i& call :for_loop 
 goto for_end
 :for_loop
 	set javaPath=!line!
 
 	:while_loop
+		echo !javaPath!
 		set prevjavaPath=!javaPath!
 		set javaPath=!javaPath:*^|=!
 		if !javaPath! EQU !prevjavaPath! goto while_end
