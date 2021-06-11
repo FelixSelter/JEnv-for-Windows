@@ -42,7 +42,6 @@ goto for_end
 	set javaPath=!line!
 
 	:while_loop
-		echo !javaPath!
 		set prevjavaPath=!javaPath!
 		set javaPath=!javaPath:*^|=!
 		if !javaPath! EQU !prevjavaPath! goto while_end
