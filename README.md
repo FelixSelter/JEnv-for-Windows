@@ -27,15 +27,22 @@ Example: `jenv add jdk15 D:\Programme\Java\jdk-15.0.1`
 
 ## Installation
 
- 1. Download the jenv.bat file You can inspect it with rightmouse edit
+ 1. Download the jenv.bat file. You can inspect it with rightmouse edit to see if its malicious
+ 
  2. Put it into a folder which is in your path so it can be called by
-   3. the command line Now remove all except of one Java-Locations from
- 4.   your paths. The script will edit the user enviroment variables and
-   5. only works if there is a version of java added. Also it requires the
-   6. same java version set as JAVA_HOME Now you can add your different
-   7. java versions and swap between them No need to fear that your path
-   8. gets deletet. No setx was used
-   9. I hope I could help you. Else open an issue
+    the command line.
+ 
+ 3. Now remove all except of one Java-Locations from
+    your paths. The script will edit the user enviroment variables and
+    only works if there is a version of java added.
+ 
+ 4. Also it requires the same Java enviroment as JAVA_HOME.
+ 
+ 5. Now you can add your different java versions and swap between them.
+ 
+ 6. No need to fear that your path gets deletet. No setx was used
+ 
+ 7. I hope I could help you. Else open an issue
 
  
 
