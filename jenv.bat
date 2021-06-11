@@ -26,7 +26,7 @@ if "%1" EQU "/?" goto help
 	goto exit
 
 :list
-	FOR /F "usebackq" %%i in ("%~dp0jenv.config") DO echo %%i
+	for /f "usebackq delims=" %%i in ("%~dp0jenv.config") do echo %%i
 	goto exit
 
 :use
