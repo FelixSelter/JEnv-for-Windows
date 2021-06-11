@@ -1,6 +1,5 @@
 @echo off
 
-
 set permanently=FALSE
 set argC=0
 for %%x in (%*) do Set /A argC+=1
@@ -21,7 +20,7 @@ if "%1" EQU "/?" goto help
 
 
 :add
-	if %argC% NEQ 3 echo "Systax error: jenv add <name> <javaPath to JAVA_HOME>"
+	if %argC% NEQ 3 echo "Syntax error: jenv add <name> <javaPath to JAVA_HOME>"&goto exit
 
 	(echo %2^|%3)>>"%~dp0jenv.config"
 	goto exit
@@ -31,7 +30,7 @@ if "%1" EQU "/?" goto help
 	goto exit
 
 :use
-	if %argC% NEQ 2 echo "Systax error: jenv use <name>"
+	if %argC% NEQ 2 echo "Syntax error: jenv use <name>"&goto exit
 	set toUse=%2
 
 rem need local to wait for the for loop vars
