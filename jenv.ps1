@@ -1,3 +1,5 @@
+#Requires -Version 5.0
+
 function Invoke-Help {
 
     param (
