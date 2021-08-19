@@ -39,6 +39,8 @@ Example: `jenv add jdk15 D:\Programme\Java\jdk-15.0.1`
  2. Put it into a folder which is in your path so it can be called by the command line.
  
  3. Now you can add your different java versions and swap between them.
+
+ 4. Call the jenv.bat file. Not the PowerShell file!
  
  4. I hope I could help you. Else open an issue
 
