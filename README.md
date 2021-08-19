@@ -12,7 +12,7 @@
 
 I hope you enjoy it
 
-1) **Adds a new JDK to you list**  
+1) **Adds a new Java  environment**  
 *jenv add `<name> <path>`*  
 Example: `jenv add jdk15 D:\Programme\Java\jdk-15.0.1`
  
@@ -41,7 +41,4 @@ Example: `jenv add jdk15 D:\Programme\Java\jdk-15.0.1`
  3. Now you can add your different java versions and swap between them.
  
  4. I hope I could help you. Else open an issue
-
- 
-
 
