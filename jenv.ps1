@@ -11,6 +11,7 @@ function Invoke-Help {
     if (!$command -or $command -eq "use") { Write-Output '"jenv use <name>" changes the java_home and path for the current session' }
     if (!$command -or $command -eq "change") { Write-Output '"jenv change <name>" changes the java_home and path permanently' }
     if (!$command -or $command -eq "list") { Write-Output '"jenv list" lists all added JAVA Environments' }
+    if (!$command -or $command -eq "remove") { Write-Output '"jenv remove <name>" removes an existing java version' }
     Exit
 }
 
@@ -44,6 +45,7 @@ function Invoke-Add {
     Write-Output "Added new JEnv successfully"
     Exit
 }
+
 function Invoke-Use {
     #checking params
     param (
@@ -110,7 +112,29 @@ function Invoke-List {
     }
     Exit
 }
+function Invoke-Remove {
+    #checking params
+    param (
+        [string[]]$arguments
+    )
 
+    $name = $arguments[1]
+    if (!$name) {
+        Write-Output "No name was given to jenv."
+        Invoke-Help "add"
+    }
+
+    #Actual action
+    if (!$config.ContainsKey($name)) {
+        Write-Output ("No JEnv with name $name exists" -Replace ('\n', ''))
+        Exit 
+    }
+    Get-Content -path jenv.config | Where { $_ -notmatch "^$name=" } | Set-Content -path jenv.config.tmp
+    Remove-Item -path jenv.config
+    Rename-Item -path jenv.config.tmp -NewName jenv.config
+    Write-Output "Removed JEnv $name successfully"
+    Exit
+}
 
 # Load config file
 if (!(Test-Path "jenv.config")) {
@@ -131,6 +155,7 @@ switch ( $action ) {
     use { Invoke-Use $args $False }
     change { Invoke-Change $args }
     list { Invoke-List $args }
+    remove { Invoke-Remove $args }
     -h { Invoke-Help }
     --help { Invoke-Help }
 }

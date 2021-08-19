@@ -8,15 +8,13 @@
  - For example you can build a gradle project
    which requires java8 without changing your enviroment variables and
    than switch back to work with java15
- - Its written in cmd and powershell so it can change the enviroment variables and can run on any windows10.
+ - It's written in cmd and powershell so it can change the enviroment variables and can run on any windows10.
 
 I hope you enjoy it
 
-1) **Adds a new JDK to you list:**  
+1) **Adds a new JDK to you list**  
 *jenv add `<name> <path>`*  
 Example: `jenv add jdk15 D:\Programme\Java\jdk-15.0.1`
- 
-
  
 2) **Change your %PATH% and your %JAVA_HOME% for the current session**  
  *jenv use `<name>`*  
@@ -30,12 +28,15 @@ Example: `jenv add jdk15 D:\Programme\Java\jdk-15.0.1`
  *jenv list*  
  Example: jenv list
 
+ 5) **Remove an exsiting JDK from the JEnv list**  
+ *jenv remove `<name>`*  
+ Example: jenv remove jdk15
+
 ## Installation
 
  1. Download the jenv.bat and the jenv.ps1 file. You can inspect it with rightmouse edit to see if its malicious
  
- 2. Put it into a folder which is in your path so it can be called by
-    the command line.
+ 2. Put it into a folder which is in your path so it can be called by the command line.
  
  3. Now you can add your different java versions and swap between them.
  
