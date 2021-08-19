@@ -12,21 +12,22 @@
 
 I hope you enjoy it
 
-1) **Adds a new JDK to you list:**
-*jenv add `<name> <path>`*
+1) **Adds a new JDK to you list:**  
+*jenv add `<name> <path>`*  
 Example: `jenv add jdk15 D:\Programme\Java\jdk-15.0.1`
  
 
  
-2) **Change your %PATH% and your %JAVA_HOME% for the current session**
- *jenv use `<name>`*
+2) **Change your %PATH% and your %JAVA_HOME% for the current session**  
+ *jenv use `<name>`*  
  Example: jenv use jdk15
  
-3) **Change your %PATH% and your %JAVA_HOME% permanently**
- *jenv change `<name>`*
+3) **Change your %PATH% and your %JAVA_HOME% permanently**  
+ *jenv change `<name>`*  
  Example: jenv change jdk15
-4) **List all your Java environments**
- *jenv list*
+ 
+4) **List all your Java environments**  
+ *jenv list*  
  Example: jenv list
 
 ## Installation
