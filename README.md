@@ -44,3 +44,7 @@ Example: `jenv add jdk15 D:\Programme\Java\jdk-15.0.1`
  
  4. I hope I could help you. Else open an issue
 
+## Technical Details
+![SystemEnvironmentVariablesHirachyShell](https://user-images.githubusercontent.com/55546882/130204196-1a800310-4454-49bd-8d80-161b0e7cca3f.PNG)
+
+![SystemEnvironmentVariablesHirachyPowerShell PNG](https://user-images.githubusercontent.com/55546882/130204185-b54368cc-34db-40d1-a707-4c5477ca236b.PNG)
