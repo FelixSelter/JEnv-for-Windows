@@ -46,8 +46,9 @@ Example: `jenv add jdk15 D:\Programme\Java\jdk-15.0.1`
 
 ## Technical Details
 
-You can also call the jenv.ps1 script from powershell. You cannot call the ps1 script from cmd
-An additional parameter to the PowerShell script was added. "--output" alias "-o" will create the tmp files for the batch. See images below
+You can also call the jenv.ps1 script from powershell.  
+You cannot call the ps1 script from cmd  
+An additional parameter to the PowerShell script was added. "--output" alias "-o" will create the tmp files for the batch. See images below  
 
 ![SystemEnvironmentVariablesHirachyShell](https://user-images.githubusercontent.com/55546882/130204196-1a800310-4454-49bd-8d80-161b0e7cca3f.PNG)
 
