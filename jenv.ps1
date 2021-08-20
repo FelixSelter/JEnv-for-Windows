@@ -1,4 +1,5 @@
 #Requires -Version 5.0
+#TODO check if its a valid path when new jenv is added
 
 function Invoke-Help {
 
@@ -23,6 +24,7 @@ function Invoke-Add {
 
     $name = $arguments[1]
     $path = $arguments[2]
+
     if (!$name) {
         Write-Output "No name was given to jenv."
         Invoke-Help "add"
@@ -31,6 +33,9 @@ function Invoke-Add {
         Write-Output "No path was given to jenv."
         Invoke-Help "add"
     }
+
+    if ($name.Contains("=") -or $path.Contains("=")) { Write-Output 'Name and path cant contain "=" characters'; Exit }
+    if (! (Test-Path $path"\bin\java.exe")) { Write-Output 'The specified path is not a valid JAVA_HOME. File not found: '$path"\bin\java.exe"; Exit }
 
     #Actual action
     if ($config.ContainsKey($name)) {
@@ -65,6 +70,7 @@ function Invoke-Use {
     }
 
     #Actual action
+    if (Test-Path "jenv.home.tmp") { Remove-Item "jenv.home.tmp" }
     if ($arguments.Contains("--output") -or $arguments.Contains("-o")) {
         Add-Content -path jenv.home.tmp -value $config.Get_Item($name)
     }
@@ -84,6 +90,7 @@ function Invoke-Use {
     $newPath += $config.Get_Item($name) + "\bin"
     Write-Output ("Added " + $config.Get_Item($name) + "\bin to the path" -Replace ('\n', ''))
 
+    if (Test-Path "jenv.path.tmp") { Remove-Item "jenv.path.tmp" }
     if ($arguments.Contains("--output") -or $arguments.Contains("-o")) {
         Add-Content -path jenv.path.tmp -value $newPath
     }
