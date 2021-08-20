@@ -65,7 +65,11 @@ function Invoke-Use {
     }
 
     #Actual action
-    Add-Content -path jenv.home.tmp -value $config.Get_Item($name)
+    if ($arguments.Contains("--output") -or $arguments.Contains("-o")) {
+        Add-Content -path jenv.home.tmp -value $config.Get_Item($name)
+    }
+    $Env:JAVA_HOME = $config.Get_Item($name)
+    
     $newPath = ""
     $($Env:Path.split(';', [System.StringSplitOptions]::RemoveEmptyEntries)).foreach{
         $path = $_
@@ -79,8 +83,12 @@ function Invoke-Use {
     }
     $newPath += $config.Get_Item($name) + "\bin"
     Write-Output ("Added " + $config.Get_Item($name) + "\bin to the path" -Replace ('\n', ''))
-    Add-Content -path jenv.path.tmp -value $newPath
 
+    if ($arguments.Contains("--output") -or $arguments.Contains("-o")) {
+        Add-Content -path jenv.path.tmp -value $newPath
+    }
+    $Env:PATH = $newPath
+    
     if ($saveEnv) {
         [System.Environment]::SetEnvironmentVariable('JAVA_HOME', $config.Get_Item($name), [System.EnvironmentVariableTarget]::User)
         [System.Environment]::SetEnvironmentVariable('PATH', $newPath, [System.EnvironmentVariableTarget]::User)

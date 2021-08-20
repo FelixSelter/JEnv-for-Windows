@@ -1,5 +1,5 @@
 @echo off
-Powershell.exe -executionpolicy remotesigned -File  jenv.ps1 %*
+Powershell.exe -executionpolicy remotesigned -File  jenv.ps1 %* -o
 
 if exist jenv.home.tmp (
     FOR /F "tokens=* delims=" %%x in (jenv.home.tmp) DO (
