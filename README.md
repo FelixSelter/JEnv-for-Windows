@@ -44,6 +44,37 @@ Example: `jenv add jdk15 D:\Programme\Java\jdk-15.0.1`
  
  5. I hope I could help you. Else open an issue
 
+## Powshell Installation
+
+You should know vim before executing these bash.
+
+Please run the Powershell/Terminal as admin.
+
+```bash
+mkdir C:\Users\Public\JEnv-for-Windows
+git clone git@github.com:FelixSelter/JEnv-for-Windows.git C:\Users\Public\JEnv-for-Windows
+$env:Path += ";C:\Users\Public\JEnv-for-Windows"
+[Environment]::SetEnvironmentVariable("Path", $env:Path, [System.EnvironmentVariableTarget]::Machine)
+
+# edit jenv for your local
+cd C:\Users\Public\JEnv-for-Windows
+
+vim jenv.bat
+# change the line 2
+# from "Powershell.exe -executionpolicy remotesigned -File  jenv.ps1 %* -o"
+# to "Powershell.exe -executionpolicy remotesigned -File C:\Users\Public\JEnv-for-Windows\jenv.ps1 %* -o"
+
+# add alias for jenv to jenv.bat
+mkdir $profile
+cd $profile 
+cd ../
+ls
+# you should find a fold name like "Microsoft.PowerShell_profile.ps1"
+rmdir Microsoft.PowerShell_profile.ps1
+echo "function jenv {C:\Users\Public\JEnv-for-Windows\jenv.bat}">Microsoft.PowerShell_profile.ps1
+Set-ExecutionPolicy RemoteSigned
+```
+
 ## Technical Details
 
 You can also call the jenv.ps1 script from powershell.  
