@@ -1,6 +1,5 @@
 @echo off
 set origin=%cd%
-echo %~dp0
 cd /D %~dp0
 Powershell.exe -executionpolicy remotesigned -File  jenv.ps1 %* -o
 
