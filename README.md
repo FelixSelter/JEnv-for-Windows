@@ -12,7 +12,7 @@
 
 I hope you enjoy it
 
-1) **Adds a new Java  environment**  
+1) **Adds a new Java  environment (requires absolute path)**  
 *jenv add `<name> <path>`*  
 Example: `jenv add jdk15 D:\Programme\Java\jdk-15.0.1`
  
