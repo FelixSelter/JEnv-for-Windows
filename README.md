@@ -42,7 +42,9 @@ Example: `jenv add jdk15 D:\Programme\Java\jdk-15.0.1`
 
  4. Call the jenv.bat file. Not the PowerShell file!
  
- 5. I hope I could help you. Else open an issue
+ 5. You maybe dont want to install into your programms folder as the shell maybe require administrator rights to run jenv. 
+ 
+ 6. I hope I could help you. Else open an issue
 
 ## Technical Details
 
