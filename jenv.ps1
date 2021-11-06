@@ -1,6 +1,9 @@
 #Requires -Version 5.0
 #TODO check if its a valid path when new jenv is added
 
+$jenvConfig = $PSScriptRoot + "\jenv.config"
+$jenvConfigTmp = $PSScriptRoot + "\jenv.config.tmp"
+
 function Invoke-Help {
 
     param (
@@ -46,7 +49,7 @@ function Invoke-Add {
         Write-Output ("A JEnv with path $path already exists" -Replace ('\n', ''))
         Invoke-List
     }
-    Add-Content -path jenv.config -value $name"="$path
+    Add-Content -path $jenvConfig -value $name"="$path
     Write-Output "Added new JEnv successfully"
     Exit
 }
@@ -144,22 +147,23 @@ function Invoke-Remove {
         Write-Output ("No JEnv with name $name exists" -Replace ('\n', ''))
         Exit 
     }
-    Get-Content -path jenv.config | Where { $_ -notmatch "^$name=" } | Set-Content -path jenv.config.tmp
-    Remove-Item -path jenv.config
-    Rename-Item -path jenv.config.tmp -NewName jenv.config
+    Get-Content -path $jenvConfig | Where-Object { $_ -notmatch "^$name=" } | Set-Content -path $jenvConfigTmp
+    Remove-Item -path $jenvConfig
+    Rename-Item -path $jenvConfigTmp -NewName $jenvConfig
     Write-Output "Removed JEnv $name successfully"
     Exit
 }
 
 # Load config file
-if (!(Test-Path "jenv.config")) {
+if (!(Test-Path $jenvConfig)) {
     #create config if not exist
-    New-Item -name jenv.config -type "file"
+    New-Item -name $jenvConfig -type "file"
 }
-Get-Content "jenv.config" | foreach-object -begin { $config = @{} } -process { $k = [regex]::split($_, '='); if (($k[0].CompareTo("") -ne 0) -and ($k[0].StartsWith("[") -ne $True)) { $config.Add($k[0], $k[1]) } }
+Get-Content $jenvConfig | foreach-object -begin { $config = @{} } -process { $k = [regex]::split($_, '='); if (($k[0].CompareTo("") -ne 0) -and ($k[0].StartsWith("[") -ne $True)) { $config.Add($k[0], $k[1]) } }
 
 # Actual evaluation starts here
 $action = $args[0]
+
 if (!$action) {
     Write-Output "No argument was given to jenv."
     Invoke-Help
