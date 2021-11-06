@@ -1,5 +1,4 @@
 #Requires -Version 5.0
-#TODO check if its a valid path when new jenv is added
 
 $jenvConfig = $PSScriptRoot + "\jenv.config"
 $jenvConfigTmp = $PSScriptRoot + "\jenv.config.tmp"
