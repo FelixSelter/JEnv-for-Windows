@@ -156,7 +156,7 @@ function Invoke-Remove {
 # Load config file
 if (!(Test-Path $jenvConfig)) {
     #create config if not exist
-    New-Item -name $jenvConfig -type "file"
+    New-Item -path $jenvConfig -type "file"
 }
 Get-Content $jenvConfig | foreach-object -begin { $config = @{} } -process { $k = [regex]::split($_, '='); if (($k[0].CompareTo("") -ne 0) -and ($k[0].StartsWith("[") -ne $True)) { $config.Add($k[0], $k[1]) } }
 
