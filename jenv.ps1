@@ -1,7 +1,13 @@
 #Requires -Version 5.0
 
-$jenvConfig = $PSScriptRoot + "\jenv.config"
-$jenvConfigTmp = $PSScriptRoot + "\jenv.config.tmp"
+# The location for the config file
+If(!(test-path $Env:APPDATA\JEnv\))
+{
+      New-Item -ItemType Directory -Force -Path $Env:APPDATA\JEnv\
+}
+$jenvConfig = $Env:APPDATA + "\JEnv\jenv.config"
+$jenvConfigTmp = $Env:APPDATA + "\JEnv\jenv.config.tmp"
+
 
 function Invoke-Help {
 
@@ -156,7 +162,7 @@ function Invoke-Remove {
 # Load config file
 if (!(Test-Path $jenvConfig)) {
     #create config if not exist
-    New-Item -path $jenvConfig -type "file"
+    New-Item -path $jenvConfig -type "file" | Out-Null
 }
 Get-Content $jenvConfig | foreach-object -begin { $config = @{} } -process { $k = [regex]::split($_, '='); if (($k[0].CompareTo("") -ne 0) -and ($k[0].StartsWith("[") -ne $True)) { $config.Add($k[0], $k[1]) } }
 
