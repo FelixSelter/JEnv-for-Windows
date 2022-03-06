@@ -85,7 +85,7 @@ function Invoke-Use {
     $Env:JAVA_HOME = $config.Get_Item($name)
     
     $newPath = ""
-    $($Env:Path.split(';', [System.StringSplitOptions]::RemoveEmptyEntries)).foreach{
+    $([System.Environment]::GetEnvironmentVariable('PATH','User').split(';', [System.StringSplitOptions]::RemoveEmptyEntries)).foreach{
         $path = $_
         if ($path -notmatch '\\$') { $path += '\' }
         if (!(Test-Path $path"java.exe")) {
