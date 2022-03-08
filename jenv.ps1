@@ -1,9 +1,8 @@
 #Requires -Version 5.0
 
 # The location for the config file
-If(!(test-path $Env:APPDATA\JEnv\))
-{
-      New-Item -ItemType Directory -Force -Path $Env:APPDATA\JEnv\ | Out-Null
+if (!(test-path $Env:APPDATA\JEnv\)) {
+    New-Item -ItemType Directory -Force -Path $Env:APPDATA\JEnv\ | Out-Null
 }
 $jenvConfig = $Env:APPDATA + "\JEnv\jenv.config"
 $jenvConfigTmp = $Env:APPDATA + "\JEnv\jenv.config.tmp"
@@ -85,7 +84,7 @@ function Invoke-Use {
     $Env:JAVA_HOME = $config.Get_Item($name)
     
     $newPath = ""
-    $([System.Environment]::GetEnvironmentVariable('PATH','User').split(';', [System.StringSplitOptions]::RemoveEmptyEntries)).foreach{
+    $([System.Environment]::GetEnvironmentVariable('PATH', 'User').split(';', [System.StringSplitOptions]::RemoveEmptyEntries)).foreach{
         $path = $_
         if ($path -notmatch '\\$') { $path += '\' }
         if (!(Test-Path $path"java.exe")) {
@@ -154,7 +153,10 @@ function Invoke-Remove {
     }
     Get-Content -path $jenvConfig | Where-Object { $_ -notmatch "^$name=" } | Set-Content -path $jenvConfigTmp
     Remove-Item -path $jenvConfig
-    Rename-Item -path $jenvConfigTmp -NewName $jenvConfig
+    if (test-path $jenvConfigTmp) {
+        # If file does not exist no JEnvs are saved
+        Rename-Item -path $jenvConfigTmp -NewName $jenvConfig
+    }
     Write-Output "Removed JEnv $name successfully"
     Exit
 }
