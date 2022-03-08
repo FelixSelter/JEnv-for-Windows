@@ -3,7 +3,7 @@
 # The location for the config file
 If(!(test-path $Env:APPDATA\JEnv\))
 {
-      New-Item -ItemType Directory -Force -Path $Env:APPDATA\JEnv\
+      New-Item -ItemType Directory -Force -Path $Env:APPDATA\JEnv\ | Out-Null
 }
 $jenvConfig = $Env:APPDATA + "\JEnv\jenv.config"
 $jenvConfigTmp = $Env:APPDATA + "\JEnv\jenv.config.tmp"
