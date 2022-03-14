@@ -14,6 +14,15 @@ function Invoke-Use {
     }
     else {
 
+        # Remove the local JEnv
+        if ($name -eq "remove") {
+            $Env:JENVUSE = $null # Set for powershell users
+            Set-Content -path "jenv.use.tmp" -value $null # Create temp file so no restart of the active shell is required
+            Write-Host Your session JEnv was unset
+            return
+        }
+
+
         # Check if specified JEnv is avaible
         $jenv = $config.jenvs | Where-Object { $_.name -eq $name }
         if ($null -eq $jenv) {
