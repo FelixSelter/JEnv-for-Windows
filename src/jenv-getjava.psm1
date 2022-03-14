@@ -9,11 +9,11 @@ function Get-Java {
     $local = ($config.jenvs | Where-Object { $_.name -eq $localname }).path
     $use = $Env:JENVUSE
 
-    # Use command overwrittes everything
+    # Use command overwrites everything
     if ($use) {
         Write-Output $use
     }
-    # Local overwrittes global
+    # Local overwrites global
     elseif ($local) {
         Write-Output $local
     }

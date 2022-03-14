@@ -9,7 +9,7 @@ function Invoke-Local {
     if ($help) {
         Write-Host '"jenv local <name>"'
         Write-Host 'This command allows you to specify a java version that will always be used in this folder and all subfolders'
-        Write-Host 'This is overwritten by "jenv use"'
+        Write-Host 'This is overwriten by "jenv use"'
         Write-Host '<name> is the alias of the JEnv you want to specify'
         Write-Host Attention! You might have to call jenv first before it changes your JAVA_HOME to the local environment. The java command will work out of the box
     }

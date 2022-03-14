@@ -10,7 +10,7 @@ function Invoke-Use {
         Write-Host '"jenv use <name>"'
         Write-Host 'With this command you set your JAVA_HOME and the version of java to be used by your current shell session.' 
         Write-Host '<name> is the alias you asigned to the path with "jenv add <name> <path>"'    
-        Write-Host Careful this overwrittes "jenv local"
+        Write-Host Careful this overwrites "jenv local"
     }
     else {
 
@@ -27,7 +27,7 @@ function Invoke-Use {
                 Set-Content -path "jenv.home.tmp" -value $jenv.path # Create temp file so no restart of the active shell is required
                 Set-Content -path "jenv.use.tmp" -value $jenv.path # Create temp file so no restart of the active shell is required
             }
-            Write-Host JEnv changed for the current shell session. Careful this overwrittes "jenv local"
+            Write-Host JEnv changed for the current shell session. Careful this overwrites "jenv local"
         }
     }
 }

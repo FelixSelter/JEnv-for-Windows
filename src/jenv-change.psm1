@@ -8,7 +8,7 @@ function Invoke-Change {
 
     if ($help) {
         Write-Host '"jenv change <name>"'
-        Write-Host 'With this command you set your JAVA_HOME and the version of java to be used globally. This is overwritten by both "jenv local" and "jenv use"' 
+        Write-Host 'With this command you set your JAVA_HOME and the version of java to be used globally. This is overwriten by both "jenv local" and "jenv use"' 
         Write-Host '<name> is the alias you asigned to the path with "jenv add <name> <path>"'    
     }
     else {
