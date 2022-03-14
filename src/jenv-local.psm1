@@ -2,6 +2,7 @@ function Invoke-Local {
     param(
         [Parameter(Mandatory = $true)][object]$config,
         [Parameter(Mandatory = $true)][boolean]$help,
+        [Parameter(Mandatory = $true)][boolean]$output,
         [Parameter(Mandatory = $true)][string]$name
     )
 
@@ -40,7 +41,7 @@ function Invoke-Local {
 
         # Add new JEnv
         $config.locals += [PSCustomObject]@{
-            path = (Get-Location)
+            path = (Get-Location).path
             name = $name
         }
 

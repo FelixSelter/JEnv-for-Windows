@@ -18,7 +18,7 @@ param (
     "jenv use <name>"           Applys the given Java-Version locally for the current shell
     "jenv local <name>"         Will use the given Java-Version whenever in this folder. Will set the Java-version for all subfolders as well
     #>
-    [Parameter(Position = 0)][validateset("list", "add", "change", "use", "remove", "local")] [string]$action,
+    [Parameter(Position = 0)][validateset("list", "add", "change", "use", "remove", "local", "getjava")] [string]$action,
     
     # Displays this helpful message
     [Alias("h")]
@@ -38,6 +38,7 @@ Import-Module $PSScriptRoot\jenv-remove.psm1
 Import-Module $PSScriptRoot\jenv-change.psm1
 Import-Module $PSScriptRoot\jenv-use.psm1
 Import-Module $PSScriptRoot\jenv-local.psm1
+Import-Module $PSScriptRoot\jenv-getjava.psm1
 #endregion
 
 #region Installation
@@ -90,6 +91,18 @@ if (!($config | Get-Member global)) {
 
 #endregion
 
+#region Apply java_home for jenv local
+$localname = ($config.locals | Where-Object { $_.path -eq (Get-Location) }).name
+$javahome = ($config.jenvs | Where-Object { $_.name -eq $localname }).path
+if ($null -eq $local) {
+    $javahome = $config.global 
+}
+$Env:JAVA_HOME = $javahome # Set for powershell users
+if ($output) {
+    Set-Content -path "jenv.home.tmp" -value $javahome # Create temp file so no restart of the active shell is required
+}
+#endregion
+
 if ($help -and $action -eq "") {
     Write-Host '"jenv list"                 List all registered Java-Envs.'
     Write-Host '"jenv add <name> <path>"    Adds a new Java-Version to JEnv which can be refferenced by the given name'
@@ -107,9 +120,10 @@ else {
         list { Invoke-List $config $help @arguments }
         add { Invoke-Add $config $help @arguments }
         remove { Invoke-Remove $config $help @arguments }
-        use { Invoke-Use $config $help @arguments }
-        change { Invoke-Change $config $help @arguments }
-        local { Invoke-Local $config $help @arguments } 
+        use { Invoke-Use $config $help $output @arguments }
+        change { Invoke-Change $config $help $output @arguments }
+        local { Invoke-Local $config $help $output @arguments } 
+        getjava { Get-Java $config } 
     }
 
     #region Save the config

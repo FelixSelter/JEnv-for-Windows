@@ -2,6 +2,7 @@ function Invoke-Use {
     param(
         [Parameter(Mandatory = $true)][object]$config,
         [Parameter(Mandatory = $true)][boolean]$help,
+        [Parameter(Mandatory = $true)][boolean]$output,
         [Parameter(Mandatory = $true)][string]$name
     )
 
@@ -21,8 +22,11 @@ function Invoke-Use {
         }
         else {
             $Env:JAVA_HOME = $jenv.path # Set for powershell users
-            Set-Content -path "jenv.home.tmp" -value $jenv.path # Create temp file so no restart of the active shell is required
-            Set-Content -path "jenv.use.tmp" -value $jenv.path # Create temp file so no restart of the active shell is required
+            $Env:JENVUSE = $jenv.path # Set for powershell users
+            if ($output) {
+                Set-Content -path "jenv.home.tmp" -value $jenv.path # Create temp file so no restart of the active shell is required
+                Set-Content -path "jenv.use.tmp" -value $jenv.path # Create temp file so no restart of the active shell is required
+            }
             Write-Host JEnv changed for the current shell session. Careful this overwrittes "jenv local"
         }
     }

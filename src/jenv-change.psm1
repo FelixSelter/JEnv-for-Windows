@@ -2,6 +2,7 @@ function Invoke-Change {
     param(
         [Parameter(Mandatory = $true)][object]$config,
         [Parameter(Mandatory = $true)][boolean]$help,
+        [Parameter(Mandatory = $true)][boolean]$output,
         [Parameter(Mandatory = $true)][string]$name
     )
 
@@ -22,7 +23,9 @@ function Invoke-Change {
             Write-Host Setting JAVA_HOME globally. This could take some time
             $config.global = $jenv.path
             $Env:JAVA_HOME = $jenv.path # Set for powershell users
-            Set-Content -path "jenv.home.tmp" -value $jenv.path # Create temp file so no restart of the active shell is required
+            if ($output) {
+                Set-Content -path "jenv.home.tmp" -value $jenv.path # Create temp file so no restart of the active shell is required
+            }
             [System.Environment]::SetEnvironmentVariable("JAVA_HOME", $jenv.path, [System.EnvironmentVariableTarget]::User) # Set globally}
             Write-Host JEnv changed globally
         }
