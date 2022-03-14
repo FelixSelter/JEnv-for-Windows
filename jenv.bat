@@ -1,7 +1,22 @@
 @echo off
 
-rem #TODO: Check if powershell.exe is in path
-Powershell.exe -executionpolicy remotesigned -File  %~dp0/src/jenv.ps1 %* --output
+rem #Check if powershell.exe is in path
+where /q pwsh.exe
+IF ERRORLEVEL 1 (
+    where /q powershell.exe
+    IF ERRORLEVEL 1 (
+        set ps=powershell.exe
+    ) ELSE (
+        echo Neither pwsh.exe nor powershell.exe was found in your path.
+        echo Please install powershell it is required
+        exit
+    )
+) ELSE (
+    set ps=pwsh.exe
+)
+
+rem ps is the installred powershell
+%ps% -executionpolicy remotesigned -File  %~dp0/src/jenv.ps1 %* --output
 
 if exist jenv.home.tmp (
     FOR /F "tokens=* delims=" %%x in (jenv.home.tmp) DO (
