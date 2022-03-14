@@ -18,7 +18,7 @@ param (
     "jenv use <name>"           Applys the given Java-Version locally for the current shell
     "jenv local <name>"         Will use the given Java-Version whenever in this folder. Will set the Java-version for all subfolders as well
     #>
-    [Parameter(Mandatory = $true, Position = 0)][validateset("list", "add", "change", "use", "remove", "local")] [string]$action,
+    [Parameter(Position = 0)][validateset("list", "add", "change", "use", "remove", "local")] [string]$action,
     
     # Displays this helpful message
     [Alias("h")]
@@ -48,13 +48,13 @@ Import-Module $PSScriptRoot\jenv-local.psm1
 $javaPaths = (Get-Command java -All | Where-Object { $_.source -ne ((get-item $PSScriptRoot).parent.fullname + "\java.bat") }).source
 # Only change something when java versions are found
 if ($javaPaths.Length -gt 0) {
-    Write-Output "JEnv is changing your environment variables. This process could take longer but it happens only when a java executable is found in your path"
+    Write-Host "JEnv is changing your environment variables. This process could take longer but it happens only when a java executable is found in your path"
     $userpath = [System.Environment]::GetEnvironmentVariable("PATH", "User").split(";", [System.StringSplitOptions]::RemoveEmptyEntries)
     # Remove all javas from path
     $userPath = ($userPath | Where-Object { !$javaPaths.Contains($_) }) -join ";"
 
     $Env:PATH = $userPath # Set for powershell users
-    Add-Content -path "jenv.path.tmp" -value $userPath # Create temp file so no restart of the active shell is required
+    Set-Content -path "jenv.path.tmp" -value $userPath # Create temp file so no restart of the active shell is required
     [System.Environment]::SetEnvironmentVariable("PATH", $userPath, [System.EnvironmentVariableTarget]::User) # Set globally
 }
 #endregion
@@ -82,22 +82,37 @@ if (!($config | Get-Member jenvs)) {
 if (!($config | Get-Member locals)) {
     Add-Member -InputObject $config -MemberType NoteProperty -Name locals -Value @()
 }
-#endregion
-
-#endregion
-
-# Call the specified command
-# Action has to be one of the following because of the validateset
-
-switch ( $action ) {
-    list { Invoke-List $config @arguments }
-    add { Invoke-Add $config @arguments }
-    remove { Invoke-Remove $config @arguments }
-    use { Invoke-Use $config @arguments }
-    change { Invoke-Change $config @arguments }
-    local { Invoke-Local $config @arguments } 
+# Add locals property if it does not exist
+if (!($config | Get-Member global)) {
+    Add-Member -InputObject $config -MemberType NoteProperty -Name global -Value ""
 }
-
-#region Save the config
-ConvertTo-Json $config | Out-File $Env:APPDATA\JEnv\jenv.config.json
 #endregion
+
+#endregion
+
+if ($help -and $action -eq "") {
+    Write-Host '"jenv list"                 List all registered Java-Envs.'
+    Write-Host '"jenv add <name> <path>"    Adds a new Java-Version to JEnv which can be refferenced by the given name'
+    Write-Host '"jenv remove <name>"        Removes the specified Java-Version from JEnv'
+    Write-Host '"jenv change <name>"        Applys the given Java-Version globaly for all restarted shells and this one'
+    Write-Host '"jenv use <name>"           Applys the given Java-Version locally for the current shell'
+    Write-Host '"jenv local <name>"         Will use the given Java-Version whenever in this folder. Will set the Java-version for all subfolders as well'
+    Write-Host 'Get help for individual commands using "jenv <list/add/remove/change/use/local> --help"'
+}
+else {
+
+    # Call the specified command
+    # Action has to be one of the following because of the validateset
+    switch ( $action ) {
+        list { Invoke-List $config $help @arguments }
+        add { Invoke-Add $config $help @arguments }
+        remove { Invoke-Remove $config $help @arguments }
+        use { Invoke-Use $config $help @arguments }
+        change { Invoke-Change $config $help @arguments }
+        local { Invoke-Local $config $help @arguments } 
+    }
+
+    #region Save the config
+    ConvertTo-Json $config | Out-File $Env:APPDATA\JEnv\jenv.config.json
+    #endregion
+}
