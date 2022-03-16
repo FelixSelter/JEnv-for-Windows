@@ -58,7 +58,6 @@ if ($javaPaths.Length -gt 0) {
 
     $Env:PATH = $userPath # Set for powershell users
     Set-Content -path "jenv.path.tmp" -value $userPath # Create temp file so no restart of the active shell is required
-    [System.Environment]::SetEnvironmentVariable("PATH", $userPath, [System.EnvironmentVariableTarget]::User) # Set globally
 }
 #endregion
 
