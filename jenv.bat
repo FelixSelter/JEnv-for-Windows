@@ -5,11 +5,11 @@ where /q pwsh.exe
 IF ERRORLEVEL 1 (
     where /q powershell.exe
     IF ERRORLEVEL 1 (
-        set ps=powershell.exe
-    ) ELSE (
         echo Neither pwsh.exe nor powershell.exe was found in your path.
         echo Please install powershell it is required
-        exit
+        exit /B
+    ) ELSE (
+        set ps=powershell.exe
     )
 ) ELSE (
     set ps=pwsh.exe
