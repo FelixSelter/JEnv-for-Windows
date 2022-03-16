@@ -11,7 +11,7 @@
    then switch back to work with java15
  - It's written in cmd and powershell so it can change the environment variables and can run on any Windows-10+.
 
-I hope you enjoy it
+I hope you enjoy it. Please give me a star if you like my work. Thank you!
 
 ## Installation
 1) **Clone this repository**

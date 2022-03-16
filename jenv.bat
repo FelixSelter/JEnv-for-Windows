@@ -1,6 +1,6 @@
 @echo off
 
-rem #Check if powershell.exe is in path
+rem # Check if powershell is in path
 where /q pwsh.exe
 IF ERRORLEVEL 1 (
     where /q powershell.exe
@@ -15,7 +15,7 @@ IF ERRORLEVEL 1 (
     set ps=pwsh.exe
 )
 
-rem ps is the installred powershell
+rem ps is the installed powershell
 %ps% -executionpolicy remotesigned -File  %~dp0/src/jenv.ps1 %* --output
 
 if exist jenv.home.tmp (
