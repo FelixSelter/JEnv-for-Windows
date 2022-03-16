@@ -50,9 +50,11 @@ $javaPaths = (Get-Command java -All | Where-Object { $_.source -ne ((get-item $P
 # Only change something when java versions are found
 if ($javaPaths.Length -gt 0) {
     Write-Host "JEnv is changing your environment variables. This process could take longer but it happens only when a java executable is found in your path"
-    $userpath = [System.Environment]::GetEnvironmentVariable("PATH", "User").split(";", [System.StringSplitOptions]::RemoveEmptyEntries)
+    $userPath = [System.Environment]::GetEnvironmentVariable("PATH", "User").split(";", [System.StringSplitOptions]::RemoveEmptyEntries)
     # Remove all javas from path
-    $userPath = ($userPath | Where-Object { !$javaPaths.Contains($_) }) -join ";"
+    $userPath = ($userPath | Where-Object { !$javaPaths.Contains($_ + "\java.exe") } ) -join ";"
+    [System.Environment]::SetEnvironmentVariable("PATH", $userPath, [System.EnvironmentVariableTarget]::User) # Set globally
+    $userPath = ([System.Environment]::GetEnvironmentVariable("PATH", "MACHINE")) + $userPath
 
     $Env:PATH = $userPath # Set for powershell users
     Set-Content -path "jenv.path.tmp" -value $userPath # Create temp file so no restart of the active shell is required
