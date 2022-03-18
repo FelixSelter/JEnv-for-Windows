@@ -32,13 +32,13 @@ param (
 )
 
 #region Load all required modules
-Import-Module $PSScriptRoot\jenv-list.psm1
-Import-Module $PSScriptRoot\jenv-add.psm1
-Import-Module $PSScriptRoot\jenv-remove.psm1
-Import-Module $PSScriptRoot\jenv-change.psm1
-Import-Module $PSScriptRoot\jenv-use.psm1
-Import-Module $PSScriptRoot\jenv-local.psm1
-Import-Module $PSScriptRoot\jenv-getjava.psm1
+Import-Module $PSScriptRoot\jenv-list.psm1 -Force
+Import-Module $PSScriptRoot\jenv-add.psm1 -Force
+Import-Module $PSScriptRoot\jenv-remove.psm1 -Force
+Import-Module $PSScriptRoot\jenv-change.psm1 -Force
+Import-Module $PSScriptRoot\jenv-use.psm1 -Force
+Import-Module $PSScriptRoot\jenv-local.psm1 -Force
+Import-Module $PSScriptRoot\jenv-getjava.psm1 -Force
 #endregion
 
 #region Installation

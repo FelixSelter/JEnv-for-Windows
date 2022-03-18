@@ -1,18 +1,18 @@
 @echo off
 
 rem # Check if powershell is in path
-where /q pwsh.exe
+where /q pwsh
 IF ERRORLEVEL 1 (
-    where /q powershell.exe
+    where /q powershell
     IF ERRORLEVEL 1 (
         echo Neither pwsh.exe nor powershell.exe was found in your path.
         echo Please install powershell it is required
         exit /B
     ) ELSE (
-        set ps=powershell.exe
+        set ps=powershell
     )
 ) ELSE (
-    set ps=pwsh.exe
+    set ps=pwsh
 )
 
 rem ps is the installed powershell

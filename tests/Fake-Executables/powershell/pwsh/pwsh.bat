@@ -1,0 +1,1 @@
+echo JEnv is using pwsh
