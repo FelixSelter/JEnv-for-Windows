@@ -1,7 +1,7 @@
 
 # JEnv for Windows Version 2 is here.
 ### A complete rewrite of V.1
-## change your current Java version with 3 words
+## Change your current Java version with 3 words
 
  - JEnv allows you to change your current JDK Version.
  - This is helpful for testing or if you have projects requiring
@@ -62,3 +62,12 @@ An additional parameter to the PowerShell script was added. "--output" alias "-o
 ![SystemEnvironmentVariablesHirachyShell](https://user-images.githubusercontent.com/55546882/130204196-1a800310-4454-49bd-8d80-161b0e7cca3f.PNG)
 
 ![SystemEnvironmentVariablesHirachyPowerShell PNG](https://user-images.githubusercontent.com/55546882/130204185-b54368cc-34db-40d1-a707-4c5477ca236b.PNG)
+
+## Contributing
+If you want to contribute feel free to do so. This is a great repository for beginners as the amount of code is not huge and you can understand how it works pretty easily.  
+For running tests I suggest you to use the latest version of powershell (pwsh.exe):  
+https://docs.microsoft.com/en-us/powershell/scripting/install/installing-powershell-on-windows?view=powershell-7.2  
+Be careful you have to run it as pwsh and not as powershell  
+Then you have to install Pester. This is only for tests: `Install-Module -Name Pester -Force -SkipPublisherCheck`  
+You could use your already installed powershell as well. However it has an old Pester Module already installed which you can not use and I could not figure out how it can be updated: https://github.com/pester/Pester/issues/1201  
+Navigate into the test folder and run the `test.ps1` file. It will backup your env vars and your jenv config while testing and automatically restore them later. But you should always let the tests finish else your vars and config wont be restored
