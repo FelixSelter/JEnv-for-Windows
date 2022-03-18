@@ -1,12 +1,12 @@
 **********************
 PowerShell transcript start
-Start time: 20220318134417
+Start time: 20220318135209
 Username: FELIXSELTERLAPT\felix
 RunAs User: FELIXSELTERLAPT\felix
 Configuration Name: 
 Machine: FELIXSELTERLAPT (Microsoft Windows NT 10.0.19044.0)
 Host Application: C:\Program Files\PowerShell\7\pwsh.dll
-Process ID: 6204
+Process ID: 18804
 PSVersion: 7.2.2
 PSEdition: Core
 GitCommitId: 7.2.2
@@ -29,5 +29,5 @@ Restoring your path environment vars
 Restoring your JEnv config
 **********************
 PowerShell transcript end
-End time: 20220318134429
+End time: 20220318135221
 **********************
