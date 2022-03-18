@@ -10,7 +10,13 @@ jobs:
     name: "Release"
     runs-on: "ubuntu-latest"
     steps:
+      - uses: montudor/action-zip@v1
+        with:
+          args: zip -qq -r release.zip src
       - uses: "marvinpinto/action-automatic-releases@latest"
         with:
           repo_token: "${{ secrets.GITHUB_TOKEN }}"
           prerelease: false
+          files: |
+            release.zip
+            jenv.bat
