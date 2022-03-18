@@ -10,8 +10,10 @@ jobs:
     name: "Release"
     runs-on: "ubuntu-latest"
     steps:
-      - name: "Zip files"
+      - name: "Import workspace"
         uses: actions/checkout@v1
+
+      - name: "Zip files"
         run: "zip -r release.zip src/ jenv.bat java.bat"
 
       - name: "Create Release"
