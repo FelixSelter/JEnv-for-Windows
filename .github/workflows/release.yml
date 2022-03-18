@@ -11,7 +11,9 @@ jobs:
     runs-on: "ubuntu-latest"
     steps:
       - name: "Zip files"
-        run: "zip release.zip src/ jenv.bat java.bat"
+        uses: actions/checkout@v1
+        run: "zip -r release.zip src/ jenv.bat java.bat"
+
       - name: "Create Release"
         uses: "marvinpinto/action-automatic-releases@latest"
         with:
