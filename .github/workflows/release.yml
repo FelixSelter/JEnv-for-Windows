@@ -12,11 +12,9 @@ jobs:
     steps:
       - uses: montudor/action-zip@v1
         with:
-          args: zip -qq -r release.zip src
+          args: zip -qq -r release.zip src java.bat jenv.bat
       - uses: "marvinpinto/action-automatic-releases@latest"
         with:
           repo_token: "${{ secrets.GITHUB_TOKEN }}"
           prerelease: false
-          files: |
-            release.zip
-            jenv.bat
+          files: release.zip
