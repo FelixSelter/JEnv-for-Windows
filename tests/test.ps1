@@ -5,6 +5,12 @@
 BeforeAll {
     Start-Transcript -Path $PSScriptRoot/test-log.txt
     Write-Host Creating Backups
+
+    # Create backups folder if neccessary. Pipe to null to avoid created message
+    if (!(test-path $PSScriptRoot/backups/)) {
+        New-Item -ItemType Directory -Force -Path $PSScriptRoot/backups/ | Out-Null
+    }
+
     Write-Host Backing up your path environment vars
     $userPath = [System.Environment]::GetEnvironmentVariable("PATH", "User")
     Out-File -FilePath $PSScriptRoot/backups/jenv.userPath.bak -InputObject $userPath
