@@ -1,16 +1,21 @@
 #Requires -RunAsAdministrator
 [cmdletbinding()]param()
 
-
 BeforeAll {
     Start-Transcript -Path $PSScriptRoot/test-log.txt
     Write-Host Creating Backups
-
+    
     # Create backups folder if neccessary. Pipe to null to avoid created message
     if (!(test-path $PSScriptRoot/backups/)) {
         New-Item -ItemType Directory -Force -Path $PSScriptRoot/backups/ | Out-Null
     }
-
+    
+    # Storing location of pwsh or powershell
+    ($powershell = @(Get-Command -Name @("pwsh.exe", "powershell.exe") -All)[0].source) 2>$null
+    $powershell = (Get-Item $powershell).Directory.FullName
+    $jenv = ((get-item $PSScriptRoot).parent.fullname + "\src\jenv.ps1")
+    
+        
     Write-Host Backing up your path environment vars
     $userPath = [System.Environment]::GetEnvironmentVariable("PATH", "User")
     Out-File -FilePath $PSScriptRoot/backups/jenv.userPath.bak -InputObject $userPath
@@ -20,11 +25,11 @@ BeforeAll {
     Out-File -FilePath $PSScriptRoot/backups/jenv.systemPath.bak -InputObject $systemPath
     Write-Verbose "Backed up the following SystemPath:"
     Write-Verbose $systemPath
-
+    
     Out-File -FilePath $PSScriptRoot/backups/jenv.path.bak -InputObject $env:Path
     Write-Verbose "Backed up the following Path:"
     Write-Verbose $env:Path
-
+    
     Write-Host Backing up your JEnv Config
     if (test-path $Env:APPDATA\JEnv\jenv.config.json) {
         Copy-Item -Path $Env:APPDATA\JEnv\jenv.config.json -Destination $PSScriptRoot/backups/jenv.config.bak
@@ -46,46 +51,60 @@ BeforeAll {
     Write-Verbose "Changed SystemPath to:"
     Write-Verbose $systemPath
     $env:Path = $userPath + ";" + $systemPath
-
-    function Invoke-JEnvCommand {
+    
+    function Invoke-JEnvBatch {
         param (
             $arguments = @()
         )
-    
+        
         Start-Process -FilePath  ((get-item $PSScriptRoot).parent.fullname + "\jenv.bat") -ArgumentList $arguments -Wait -NoNewWindow -RedirectStandardOutput $PSScriptRoot/jenv.test.stdout -RedirectStandardError $PSScriptRoot/jenv.test.stderr
         $stdout = Get-Content -Path jenv.test.stdout
         Remove-Item -Path jenv.test.stdout
         $stderr = Get-Content -Path jenv.test.stderr
         Remove-Item -Path jenv.test.stderr
         return $stdout, $stderr
-        
+            
     }
-
+    
     Write-Host -----------------------------------------------
 }
-
+    
 Describe 'JEnv Batch file using correct powershell' {
     It "If theres no powershell or pwsh installed it should throw an error" {        
-        $stdout, $stderr = Invoke-JEnvCommand @("list")
+        $stdout, $stderr = Invoke-JEnvBatch @("list")
         $stdout | Should -Be @('Neither pwsh.exe nor powershell.exe was found in your path.', 'Please install powershell it is required')
     }
     It "If theres powershell, it should use it" {  
         $env:Path = ($env:Path + ";" + $PSScriptRoot + "/Fake-Executables/powershell/powershell")   
-        $stdout, $stderr = Invoke-JEnvCommand @("list")
+        $stdout, $stderr = Invoke-JEnvBatch @("list")
         $stdout | Should -Be "JEnv is using powershell"
     }
     It "If theres pwsh, it should use it" {  
         $env:Path = ($env:Path.Replace(";" + $PSScriptRoot + "/Fake-Executables/powershell/powershell", "") + ";" + $PSScriptRoot + "/Fake-Executables/powershell/pwsh")   
-        $stdout, $stderr = Invoke-JEnvCommand @("list")
+        $stdout, $stderr = Invoke-JEnvBatch @("list")
         $stdout | Should -Be "JEnv is using pwsh"
     }
     It "If theres powershell and pwsh it should use pwsh" {  
         $env:Path = ($env:Path + ";" + $PSScriptRoot + "/Fake-Executables/powershell/powershell")   
-        $stdout, $stderr = Invoke-JEnvCommand @("list")
+        $stdout, $stderr = Invoke-JEnvBatch @("list")
         $stdout | Should -Be "JEnv is using pwsh"
     }
 }
+    
+Describe 'JEnv add command' {
 
+    BeforeAll {
+        if ($null -eq $powershell) {
+            throw "Neither pwsh.exe nor powershell.exe have been found in the path. Please add one of them so the tests can use it"
+        }
+    }
+
+    It "Should not accept remove as name" {
+        $env:Path = $userPath + ";" + $powershell + ";" + $systemPath
+        & $jenv add remove wrongpath | Should -Be 'Your JEnv name cannot be "remove". Checkout "jenv remove"'
+    }
+}
+    
 AfterAll {
     Write-Host -----------------------------------------------
     Write-Host Restoring your system from backups
@@ -98,11 +117,11 @@ AfterAll {
     [System.Environment]::SetEnvironmentVariable("PATH", $systemPath , [System.EnvironmentVariableTarget]::Machine)
     Write-Verbose "Your SystemPath was restored from the backup to:"
     Write-Verbose $systemPath
-
+    
     $env:Path = (Get-Content -Path $PSScriptRoot/backups/jenv.path.bak)
     Write-Verbose "Your path was restored from the backup to:"
     Write-Verbose $env:Path
-
+    
     Write-Host Restoring your JEnv config
     if (test-path $PSScriptRoot/backups/jenv.config.bak) {
         Copy-Item -Path $PSScriptRoot/backups/jenv.config.bak -Destination $Env:APPDATA\JEnv\jenv.config.json
@@ -114,4 +133,3 @@ AfterAll {
     }
     Stop-Transcript
 }
-
