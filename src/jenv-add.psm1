@@ -19,7 +19,7 @@ function Invoke-Add {
 
         # Name cannot be remove due to the local remove
         if ($name -eq "remove") {
-            Write-Host 'Your JEnv name cannot be "remove". Checkout "jenv remove"'
+            Write-Output 'Your JEnv name cannot be "remove". Checkout "jenv remove"'
             return
         }
 
