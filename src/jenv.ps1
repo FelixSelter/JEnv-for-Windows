@@ -63,14 +63,12 @@ if ($javaPaths.Length -gt 0) {
     catch [System.Management.Automation.MethodInvocationException] {
         Write-Host JEnv wants to change your system environment vars. Therefore you need to restart it with administration rights. This should only once be required. If you dont want to, you have to call JEnv on every terminal opening to change your session vars
     }
-    catch {
-        Write-Host fuck
-    }
-
     $path = $userPath + ";" + $systemPath
 
     $Env:PATH = $path # Set for powershell users
-    Set-Content -path "jenv.path.tmp" -value $path # Create temp file so no restart of the active shell is required
+    if ($output) {
+        Set-Content -path "jenv.path.tmp" -value $path # Create temp file so no restart of the active shell is required
+    }
 }
 #endregion
 

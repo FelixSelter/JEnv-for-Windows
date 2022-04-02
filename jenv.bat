@@ -34,7 +34,13 @@ if exist jenv.path.tmp (
 
 if exist jenv.use.tmp (
     FOR /F "tokens=* delims=" %%x in (jenv.use.tmp) DO (
-        set JENVUSE=%%x
+        if "%%x" == "remove" (
+            set "JENVUSE="
+        ) ELSE (
+            set JENVUSE=%%x   
+        )
+        
     )
+
     del -f jenv.use.tmp
 )
