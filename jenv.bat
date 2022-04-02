@@ -37,7 +37,7 @@ if exist jenv.use.tmp (
         if "%%x" == "remove" (
             set "JENVUSE="
         ) ELSE (
-            set JENVUSE=%%x   
+            set JENVUSE=%%x
         )
         
     )
