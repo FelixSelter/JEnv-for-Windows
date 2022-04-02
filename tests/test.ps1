@@ -10,9 +10,7 @@ BeforeAll {
         New-Item -ItemType Directory -Force -Path $PSScriptRoot/backups/ | Out-Null
     }
     
-    # Storing location of pwsh or powershell
-    ($powershell = @(Get-Command -Name @("pwsh.exe", "powershell.exe") -All)[0].source) 2>$null
-    $powershell = (Get-Item $powershell).Directory.FullName
+    # Getting the script so it can be run
     $jenv = ((get-item $PSScriptRoot).parent.fullname + "\src\jenv.ps1")
     
         
@@ -94,14 +92,42 @@ Describe 'JEnv Batch file using correct powershell' {
 Describe 'JEnv add command' {
 
     BeforeAll {
-        if ($null -eq $powershell) {
-            throw "Neither pwsh.exe nor powershell.exe have been found in the path. Please add one of them so the tests can use it"
-        }
+        $env:Path = $userPath + ";" + $PSHOME + ";" + $systemPath
     }
 
     It "Should not accept remove as name" {
-        $env:Path = $userPath + ";" + $powershell + ";" + $systemPath
         & $jenv add remove wrongpath | Should -Be 'Your JEnv name cannot be "remove". Checkout "jenv remove"'
+    }
+
+    It "Should add a valid java version" {
+        & $jenv add fake1 $PSScriptRoot/Fake-Executables/java/v1 | Should -Be 'Successfully added the new JEnv: fake1'
+        $config = Get-Content -Path ($Env:APPDATA + "\JEnv\jenv.config.json") -Raw |  ConvertFrom-Json
+        $template = [PSCustomObject]@{
+            name = "fake1"
+            path = "$($PSScriptRoot)/Fake-Executables/java/v1"
+        }
+        $config.jenvs | ConvertTo-Json | Should -Be ($template | ConvertTo-Json)
+    }
+
+    It "Should add another valid java version" {
+        & $jenv add fake2 $PSScriptRoot/Fake-Executables/java/v2 | Should -Be 'Successfully added the new JEnv: fake2'
+        $config = Get-Content -Path ($Env:APPDATA + "\JEnv\jenv.config.json") -Raw |  ConvertFrom-Json
+        $template = @([PSCustomObject]@{
+                name = "fake1"
+                path = "$($PSScriptRoot)/Fake-Executables/java/v1"
+            }, [PSCustomObject]@{
+                name = "fake2"
+                path = "$($PSScriptRoot)/Fake-Executables/java/v2"
+            })
+        $config.jenvs | ConvertTo-Json | Should -Be ($template | ConvertTo-Json)
+    }
+
+    It "Should not add another jenv with same name" {
+        & $jenv add fake1 $PSScriptRoot/Fake-Executables/java/v2 | Should -Be 'Theres already a JEnv with that name. Consider using "jenv list"'
+    }
+
+    It "Should not add an invalid jenv" {
+        & $jenv add invalid $PSScriptRoot/Fake-Executables/java/ | Should -Be $PSScriptRoot/Fake-Executables/java/"/bin/java.exe not found. Your Path is not a valid JAVA_HOME"
     }
 }
     

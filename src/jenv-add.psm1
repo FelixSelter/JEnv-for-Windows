@@ -26,14 +26,14 @@ function Invoke-Add {
         # Check if name is already used
         foreach ($jenv in $config.jenvs) {
             if ($jenv.name -eq $name) {
-                Write-Host 'Theres already a JEnv with that name. Consider using "jenv list"'
+                Write-Output 'Theres already a JEnv with that name. Consider using "jenv list"'
                 return
             }
         }
     
         # Check if the path is a valid java home
         if (!(Test-Path -Path $path/bin/java.exe -PathType Leaf)) {
-            Write-Host ($path + "/bin/java.exe not found. Your Path is not a valid JAVA_HOME")
+            Write-Output ($path + "/bin/java.exe not found. Your Path is not a valid JAVA_HOME")
             return
         }
 
@@ -42,6 +42,6 @@ function Invoke-Add {
             name = $name
             path = $path
         }
-        Write-Host ("Successfully added the new JEnv: " + $name)
+        Write-Output ("Successfully added the new JEnv: " + $name)
     }
 }
