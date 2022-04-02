@@ -17,7 +17,7 @@ I hope you enjoy it. Please give me a star if you like my work. Thank you!
 1) **Clone this repository**
 2) **Add it to the path**
 3) **Run `jenv` once so the script can do the rest**
-4) **If your using cmd you need to call the batch file. If you use powershell its recommended to do so as well but it should also work if you call /src/jenv.ps1**
+4) **If your using cmd you need to call the batch file. If you use powershell you should call /src/jenv.ps1**
 5) **Some reported problems putting JEnv into their C:/Programs folder due to required admin rights**
 6) **I hope I could help you. Else open an issue**
 
@@ -28,11 +28,17 @@ Example: `jenv add jdk15 D:\Programme\Java\jdk-15.0.1`
  
 2) **Change your java version for the current session**  
 *jenv use `<name>`*  
-Example: `jenv use jdk15`
+Example: `jenv use jdk15`  
+Environment var for scripting:  
+---PowerShell: `$ENV:JENVUSE="jdk17"`  
+---CMD/BATCH: `set "JENVUSE=jdk17"`
  
 3) **Clear the java version for the current session**  
 *jenv use remove*  
 Example: `jenv use remove`
+Environment var for scripting:  
+---PowerShell: `$ENV:JENVUSE=$null`  
+---CMD/BATCH: `set "JENVUSE="`
 
 4) **Change your java version globally**  
 *jenv change `<name>`*  
@@ -54,6 +60,13 @@ Example: `jenv list`
 *jenv remove `<name>`*  
 Example: `jenv remove jdk15`
 
+9) **COMING SOON: Enable the use of javac, javaw or other executables sitting in the java directory**
+*jenv link `<Executable name>`*  
+Example: `jenv link javac`
+
+10) **COMING SOON: Uninstall jenv and automatically restore a Java version of your choice**
+*jenv uninstall `<name>`*  
+Example: `jenv uninstall jdk17`
  ## How does this work?
 This script creates a java.bat file that calls the java.exe with the correct version
 When the ps script changes env vars they get exported to tmp files and applied by the batch file
