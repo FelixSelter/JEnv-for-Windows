@@ -15,6 +15,6 @@ function Invoke-Remove {
         $config.jenvs = @($config.jenvs | Where-Object { $_.name -ne $name })
         # Remove any jenv local with that name
         $config.locals = @($config.locals | Where-Object { $_.name -ne $name })
-        Write-Host Your JEnv was removed successfully
+        Write-Output 'Your JEnv was removed successfully'
     }
 }

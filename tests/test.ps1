@@ -191,10 +191,40 @@ Describe 'JEnv local command' {
             })
         $config.locals | ConvertTo-Json | Should -Be ($template | ConvertTo-Json)
     }
+}
+
+Describe 'JEnv remove command' {
+
+    It "Should remove jenv from jenvs and locals" {
+        & $jenv remove fake1 | Should -Be 'Your JEnv was removed successfully'
+        $config = Get-Content -Path ($Env:APPDATA + "\JEnv\jenv.config.json") -Raw |  ConvertFrom-Json
+
+        $template = @()
+        $config.locals | ConvertTo-Json | Should -Be ($template | ConvertTo-Json)
+
+        $template = @([PSCustomObject]@{
+                name = "fake2"
+                path = "$($PSScriptRoot)/Fake-Executables/java/v2"
+            })
+        $config.jenvs | ConvertTo-Json | Should -Be ($template | ConvertTo-Json)
+    }
+
+    It "Should remove jenv from jenvs" {
+        & $jenv remove fake2 | Should -Be 'Your JEnv was removed successfully'
+        $config = Get-Content -Path ($Env:APPDATA + "\JEnv\jenv.config.json") -Raw |  ConvertFrom-Json
+
+        $template = @()
+        $config.jenvs | ConvertTo-Json | Should -Be ($template | ConvertTo-Json)
+    }
+
+    It "Should not fail if it does not exist" {
+        & $jenv remove fake2 | Should -Be 'Your JEnv was removed successfully'
+    }
 
     AfterAll {
         Set-Location ((get-item $PSScriptRoot).parent.fullname + "/tests")
     }
+
 }
 
 
