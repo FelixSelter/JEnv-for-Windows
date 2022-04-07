@@ -18,7 +18,7 @@ param (
     "jenv use <name>"           Applys the given Java-Version locally for the current shell
     "jenv local <name>"         Will use the given Java-Version whenever in this folder. Will set the Java-version for all subfolders as well
     #>
-    [Parameter(Position = 0)][validateset("list", "add", "change", "use", "remove", "local", "getjava")] [string]$action,
+    [Parameter(Position = 0)][validateset("list", "add", "change", "use", "remove", "local", "getjava", "link")] [string]$action,
     
     # Displays this helpful message
     [Alias("h")]
@@ -39,6 +39,7 @@ Import-Module $PSScriptRoot\jenv-change.psm1 -Force
 Import-Module $PSScriptRoot\jenv-use.psm1 -Force
 Import-Module $PSScriptRoot\jenv-local.psm1 -Force
 Import-Module $PSScriptRoot\jenv-getjava.psm1 -Force
+Import-Module $PSScriptRoot\jenv-link.psm1 -Force
 #endregion
 
 #region Installation
@@ -122,6 +123,7 @@ if ($help -and $action -eq "") {
     Write-Host '"jenv change <name>"        Applys the given Java-Version globaly for all restarted shells and this one'
     Write-Host '"jenv use <name>"           Applys the given Java-Version locally for the current shell'
     Write-Host '"jenv local <name>"         Will use the given Java-Version whenever in this folder. Will set the Java-version for all subfolders as well'
+    Write-Host '"jenv link <executable>"    Creates shortcuts for executables inside JAVA_HOME. For example "javac"'
     Write-Host 'Get help for individual commands using "jenv <list/add/remove/change/use/local> --help"'
 }
 else {
@@ -136,6 +138,7 @@ else {
         change { Invoke-Change $config $help $output @arguments }
         local { Invoke-Local $config $help $output @arguments } 
         getjava { Get-Java $config } 
+        link { Invoke-Link $config $help @arguments } 
     }
 
     #region Save the config
