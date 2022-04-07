@@ -60,7 +60,7 @@ Example: `jenv list`
 *jenv remove `<name>`*  
 Example: `jenv remove jdk15`
 
-9) **COMING SOON: Enable the use of javac, javaw or other executables sitting in the java directory**
+9) **Enable the use of javac, javaw or other executables sitting in the java directory**
 *jenv link `<Executable name>`*  
 Example: `jenv link javac`
 
