@@ -18,14 +18,14 @@ function Invoke-Local {
         # Remove the local JEnv
         if ($name -eq "remove") {
             $config.locals = @($config.locals | Where-Object { $_.path -ne (Get-Location) })
-            Write-Host Your local JEnv was unset
+            Write-Output "Your local JEnv was unset"
             return
         }
 
         # Check if specified JEnv is avaible
         $jenv = $config.jenvs | Where-Object { $_.name -eq $name }
         if ($null -eq $jenv) {
-            Write-Host Theres no JEnv with name $name Consider using "jenv list"
+            Write-Output "Theres no JEnv with name $name Consider using `"jenv list`""
             return
         }
 
@@ -34,7 +34,7 @@ function Invoke-Local {
             if ($jenv.path -eq (Get-Location)) {
                 # if path is used replace with new version
                 $jenv.name = $name
-                Write-Host "Your replaced your java version for" (Get-Location) with $name
+                Write-Output "Your replaced your java version for" (Get-Location) with $name
                 return
             }
         }
@@ -45,6 +45,6 @@ function Invoke-Local {
             name = $name
         }
 
-        Write-Host $name "is now your local java version for" (Get-Location)
+        Write-Output $name "is now your local java version for" (Get-Location)
     }
 }

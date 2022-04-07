@@ -131,6 +131,73 @@ Describe 'JEnv add command' {
     }
 }
     
+Describe 'JEnv local command' {
+
+    BeforeAll {
+        $env:Path = $userPath + ";" + $PSHOME + ";" + $systemPath
+    }
+
+    It "Should add a valid local" {
+        & $jenv local fake1 | Should -Be  @('fake1', 'is now your local java version for', "C:\JEnv-for-Windows\tests")
+        $config = Get-Content -Path ($Env:APPDATA + "\JEnv\jenv.config.json") -Raw |  ConvertFrom-Json
+
+        $template = @([PSCustomObject]@{
+                path = "C:\JEnv-for-Windows\tests"
+                name = "fake1"
+            })
+        $config.locals | ConvertTo-Json | Should -Be ($template | ConvertTo-Json)
+    }
+
+    It "Should add a valid local with different path and jdk" {
+        Set-Location $HOME
+        & $jenv local fake2 | Should -Be  @('fake2', 'is now your local java version for', $HOME)
+        $config = Get-Content -Path ($Env:APPDATA + "\JEnv\jenv.config.json") -Raw |  ConvertFrom-Json
+
+        $template = @([PSCustomObject]@{
+                path = "C:\JEnv-for-Windows\tests"
+                name = "fake1"
+            }, [PSCustomObject]@{
+                path = $HOME
+                name = "fake2"
+            })
+        $config.locals | ConvertTo-Json | Should -Be ($template | ConvertTo-Json)
+    }
+
+    It "Should replace jenv for path if path already in config" {
+        & $jenv local fake1 | Should -Be  @('Your replaced your java version for', $HOME, 'with', 'fake1')
+        $config = Get-Content -Path ($Env:APPDATA + "\JEnv\jenv.config.json") -Raw |  ConvertFrom-Json
+
+        $template = @([PSCustomObject]@{
+                path = "C:\JEnv-for-Windows\tests"
+                name = "fake1"
+            }, [PSCustomObject]@{
+                path = $HOME
+                name = "fake1"
+            })
+        $config.locals | ConvertTo-Json | Should -Be ($template | ConvertTo-Json)
+    }
+
+    It "Should not set a local if jenv was not added to the config" {
+        & $jenv local notavaible | Should -Be  'Theres no JEnv with name notavaible Consider using "jenv list"'
+    }
+
+    It "Should remove jenv from config" {
+        & $jenv local remove | Should -Be  "Your local JEnv was unset"
+        $config = Get-Content -Path ($Env:APPDATA + "\JEnv\jenv.config.json") -Raw |  ConvertFrom-Json
+
+        $template = @([PSCustomObject]@{
+                path = "C:\JEnv-for-Windows\tests"
+                name = "fake1"
+            })
+        $config.locals | ConvertTo-Json | Should -Be ($template | ConvertTo-Json)
+    }
+
+    AfterAll {
+        Set-Location ((get-item $PSScriptRoot).parent.fullname + "/tests")
+    }
+}
+
+
 AfterAll {
     Write-Host -----------------------------------------------
     Write-Host Restoring your system from backups
