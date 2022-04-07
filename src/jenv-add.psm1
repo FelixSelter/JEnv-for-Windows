@@ -9,7 +9,7 @@ function Invoke-Add {
     if ($help) {
         Write-Host '"jenv add" <name> <path>'
         Write-Host With this command you can tell JEnv which java versions you have installed
-        Write-Host '<name> is an alias you hav to give the java version for easier referencing. It cannot be remove'
+        Write-Host '<name> is an alias you have to give the java version for easier referencing. It cannot be remove'
         Write-Host '<path> is the path to the parent of your bin folder. For example: "C:\Program Files\Java\jdk-17"'
         Write-Host 'You have to register your JEnvs first before you can use "jenv change", "jenv use" or "jenv local"'
         Write-Host 'List all registered java versions with "jenv list"'
