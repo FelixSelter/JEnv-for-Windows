@@ -35,7 +35,6 @@ jobs:
 
       - name: Commit and push changes
         run: |
-          cat src/jenv.ps1
           git add src/jenv.ps1
           git commit -m "Inserted version into source file"
           git push
