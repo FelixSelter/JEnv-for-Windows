@@ -11,18 +11,10 @@ jobs:
     runs-on: "ubuntu-latest"
     steps:
       - name: "Import workspace"
-        uses: actions/checkout@v1
-
-      - uses: actions/checkout@v2
+        uses: actions/checkout@v2
 
       - name: "Set env"
         run: 'echo "RELEASE_VERSION=${GITHUB_REF#refs/*/}" >> $GITHUB_ENV'
-
-      - name: Setup git
-        run: |
-          git config --global user.name "FelixSelter"
-          git config --global user.email "felixselterdeveloping@gmail.com"
-          git checkout main
 
       - name: Find and Replace
         uses: jacobtomlinson/gha-find-replace@v2
@@ -34,6 +26,8 @@ jobs:
 
       - name: Commit and push changes
         run: |
+          git config --global user.name "FelixSelter"
+          git config --global user.email "felixselterdeveloping@gmail.com"
           git add src/jenv.ps1
           git commit -m "Inserted version into source file"
           git push
