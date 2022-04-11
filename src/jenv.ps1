@@ -44,6 +44,7 @@ Import-Module $PSScriptRoot\jenv-link.psm1 -Force
 
 #region Installation
 # TODO: Check for autoupdates
+$JENV_VERSION = "v2.0.3"
 
 #region Remove any java versions from path
 # Get all javas except for our fake java script
