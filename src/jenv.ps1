@@ -43,7 +43,7 @@ Import-Module $PSScriptRoot\jenv-link.psm1 -Force
 #endregion
 
 #region Installation
-# TODO: Check for autoupdates working on
+# TODO: Check for autoupdates
 $JENV_VERSION = "v2.0.3"
 
 #region Remove any java versions from path
