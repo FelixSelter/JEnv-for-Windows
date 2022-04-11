@@ -30,7 +30,7 @@ jobs:
         run: |
           git config --global user.name "FelixSelter"
           git config --global user.email "felixselterdeveloping@gmail.com"
-
+          git checkout main
           git add src/jenv.ps1
           git commit -m "Inserted version into source file"
           git push
