@@ -13,6 +13,15 @@ jobs:
       - name: "Import workspace"
         uses: actions/checkout@v1
 
+      - uses: actions/checkout@v2
+      - name: Find and Replace
+        uses: jacobtomlinson/gha-find-replace@v2
+        with:
+          include: "src/jenv.ps1"
+          find: "\\$JENV_VERSION = \"(.+?)\""
+          replace: "world"
+          regex: true
+
       - name: "Zip files"
         run: "zip -r JEnv.zip src/ jenv.bat java.bat"
 
