@@ -26,6 +26,15 @@ jobs:
           replace: 'JENV_VERSION = "${{ env.RELEASE_VERSION }}"'
           regex: true
 
+      - name: Commit and push changes
+        run: |
+          git config --global user.name "FelixSelter"
+          git config --global user.email "felixselterdeveloping@gmail.com"
+
+          git add src/jenv.ps1
+          git commit -m "Inserted version into source file"
+          git push
+
       - name: "Zip files"
         run: "zip -r JEnv.zip src/ jenv.bat java.bat"
 
