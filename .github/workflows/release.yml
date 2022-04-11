@@ -23,7 +23,7 @@ jobs:
         with:
           include: "src/jenv.ps1"
           find: "\\$JENV_VERSION = \"(.+?)\""
-          replace: '$JENV_VERSION = "${{ env.RELEASE_VERSION }}"'
+          replace: '\$JENV_VERSION = "${{ env.RELEASE_VERSION }}"'
           regex: true
 
       - name: "Zip files"
