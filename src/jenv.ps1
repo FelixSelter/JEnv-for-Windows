@@ -18,7 +18,7 @@ param (
     "jenv use <name>"           Applys the given Java-Version locally for the current shell
     "jenv local <name>"         Will use the given Java-Version whenever in this folder. Will set the Java-version for all subfolders as well
     #>
-    [Parameter(Position = 0)][validateset("list", "add", "change", "use", "remove", "local", "getjava", "link")] [string]$action,
+    [Parameter(Position = 0)][validateset("list", "add", "change", "use", "remove", "local", "getjava", "link", "uninstall")] [string]$action,
 
     # Displays this helpful message
     [Alias("h")]
@@ -40,6 +40,7 @@ Import-Module $PSScriptRoot\jenv-use.psm1 -Force
 Import-Module $PSScriptRoot\jenv-local.psm1 -Force
 Import-Module $PSScriptRoot\jenv-getjava.psm1 -Force
 Import-Module $PSScriptRoot\jenv-link.psm1 -Force
+Import-Module $PSScriptRoot\jenv-uninstall.psm1 -Force
 #endregion
 
 #region Installation
@@ -108,7 +109,7 @@ if (!($config | Get-Member global)) {
 #region Apply java_home for jenv local
 $localname = ($config.locals | Where-Object { $_.path -eq (Get-Location) }).name
 $javahome = ($config.jenvs | Where-Object { $_.name -eq $localname }).path
-if ($null -eq $local) {
+if ($null -eq $localname) {
     $javahome = $config.global
 }
 $Env:JAVA_HOME = $javahome # Set for powershell users
@@ -125,6 +126,7 @@ if ($help -and $action -eq "") {
     Write-Host '"jenv use <name>"           Applys the given Java-Version locally for the current shell'
     Write-Host '"jenv local <name>"         Will use the given Java-Version whenever in this folder. Will set the Java-version for all subfolders as well'
     Write-Host '"jenv link <executable>"    Creates shortcuts for executables inside JAVA_HOME. For example "javac"'
+    Write-Host '"jenv uninstall <name>"     Deletes JEnv and restores the specified java version to the system. You may keep your config file'
     Write-Host 'Get help for individual commands using "jenv <list/add/remove/change/use/local> --help"'
 }
 else {
@@ -132,7 +134,7 @@ else {
     # Call the specified command
     # Action has to be one of the following because of the validateset
     switch ( $action ) {
-        list { Invoke-List $config $help @arguments }
+        list { Invoke-List $config $help }
         add { Invoke-Add $config $help @arguments }
         remove { Invoke-Remove $config $help @arguments }
         use { Invoke-Use $config $help $output @arguments }
@@ -140,6 +142,7 @@ else {
         local { Invoke-Local $config $help @arguments }
         getjava { Get-Java $config }
         link { Invoke-Link $help @arguments }
+        uninstall { Invoke-Uninstall $help $config @arguments }
     }
 
     #region Save the config

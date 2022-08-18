@@ -16,7 +16,7 @@ function Invoke-Change {
         # Check if specified JEnv is avaible
         $jenv = $config.jenvs | Where-Object { $_.name -eq $name }
         if ($null -eq $jenv) {
-            Write-Host 'Theres no JEnv with name {0} Consider using "jenv list"' -f $name
+            Write-Host ('Theres no JEnv with name {0} Consider using "jenv list"' -f $name)
             return
         }
         else {

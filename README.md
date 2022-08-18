@@ -67,7 +67,7 @@ Example: `jenv remove jdk15`
 *jenv link `<Executable name>`*  
 Example: `jenv link javac`
 
-10) **COMING SOON: Uninstall jenv and automatically restore a Java version of your choice**
+10) **Uninstall jenv and automatically restore a Java version of your choice**
 *jenv uninstall `<name>`*  
 Example: `jenv uninstall jdk17`
  ## How does this work?

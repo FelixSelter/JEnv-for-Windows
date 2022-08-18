@@ -1,7 +1,7 @@
 function Invoke-List {
     param (
-        [object]$config,
-        [boolean]$help
+        [Parameter(Mandatory = $true)][object]$config,
+        [Parameter(Mandatory = $true)][boolean]$help
     )
 
     if ($help) {

@@ -33,7 +33,7 @@ function Invoke-Local {
             if ($jenv.path -eq (Get-Location)) {
                 # if path is used replace with new version
                 $jenv.name = $name
-                Write-Output "Your replaced your java version for {0} {1}" -f (Get-Location), $name
+                Write-Output ("Your replaced your java version for {0} {1}" -f (Get-Location), $name)
                 return
             }
         }
@@ -44,6 +44,6 @@ function Invoke-Local {
             name = $name
         }
 
-        Write-Output "{0} is now your local java version for {1}" -f (Get-Location), $name
+        Write-Output ("{0} is now your local java version for {1}" -f (Get-Location), $name)
     }
 }
