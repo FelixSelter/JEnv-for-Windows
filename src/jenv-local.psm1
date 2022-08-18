@@ -2,7 +2,6 @@ function Invoke-Local {
     param(
         [Parameter(Mandatory = $true)][object]$config,
         [Parameter(Mandatory = $true)][boolean]$help,
-        [Parameter(Mandatory = $true)][boolean]$output,
         [Parameter(Mandatory = $true)][string]$name
     )
 
@@ -11,7 +10,7 @@ function Invoke-Local {
         Write-Host 'This command allows you to specify a java version that will always be used in this folder and all subfolders'
         Write-Host 'This is overwriten by "jenv use"'
         Write-Host '<name> is the alias of the JEnv you want to specify'
-        Write-Host Attention! You might have to call jenv first before it changes your JAVA_HOME to the local environment. The java command will work out of the box
+        Write-Host "Attention! You might have to call jenv first before it changes your JAVA_HOME to the local environment. The java command will work out of the box"
     }
     else {
 
@@ -34,7 +33,7 @@ function Invoke-Local {
             if ($jenv.path -eq (Get-Location)) {
                 # if path is used replace with new version
                 $jenv.name = $name
-                Write-Output "Your replaced your java version for" (Get-Location) with $name
+                Write-Output "Your replaced your java version for {0} {1}" -f (Get-Location), $name
                 return
             }
         }
@@ -45,6 +44,6 @@ function Invoke-Local {
             name = $name
         }
 
-        Write-Output $name "is now your local java version for" (Get-Location)
+        Write-Output "{0} is now your local java version for {1}" -f (Get-Location), $name
     }
 }

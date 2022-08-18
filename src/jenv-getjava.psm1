@@ -3,7 +3,7 @@ function Get-Java {
     param (
         [object]$config
     )
-    
+
     $global = $config.global
     $localname = ($config.locals | Where-Object { $_.path -eq (Get-Location) }).name
     $local = ($config.jenvs | Where-Object { $_.name -eq $localname }).path

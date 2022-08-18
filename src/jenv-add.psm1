@@ -8,7 +8,7 @@ function Invoke-Add {
 
     if ($help) {
         Write-Host '"jenv add" <name> <path>'
-        Write-Host With this command you can tell JEnv which java versions you have installed
+        Write-Host "With this command you can tell JEnv which java versions you have installed"
         Write-Host '<name> is an alias you have to give the java version for easier referencing. It cannot be remove'
         Write-Host '<path> is the path to the parent of your bin folder. For example: "C:\Program Files\Java\jdk-17"'
         Write-Host 'You have to register your JEnvs first before you can use "jenv change", "jenv use" or "jenv local"'
@@ -30,7 +30,6 @@ function Invoke-Add {
                 return
             }
         }
-    
         # Check if the path is a valid java home
         if (!(Test-Path -Path $path/bin/java.exe -PathType Leaf)) {
             Write-Output ($path + "/bin/java.exe not found. Your Path is not a valid JAVA_HOME")

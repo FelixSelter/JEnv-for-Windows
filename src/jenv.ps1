@@ -19,7 +19,7 @@ param (
     "jenv local <name>"         Will use the given Java-Version whenever in this folder. Will set the Java-version for all subfolders as well
     #>
     [Parameter(Position = 0)][validateset("list", "add", "change", "use", "remove", "local", "getjava", "link")] [string]$action,
-    
+
     # Displays this helpful message
     [Alias("h")]
     [Switch]$help,
@@ -63,7 +63,7 @@ if ($javaPaths.Length -gt 0) {
         [System.Environment]::SetEnvironmentVariable("PATH", $systemPath, [System.EnvironmentVariableTarget]::Machine) # Set globally
     }
     catch [System.Management.Automation.MethodInvocationException] {
-        Write-Host JEnv wants to change your system environment vars. Therefore you need to restart it with administration rights. This should only once be required. If you dont want to, you have to call JEnv on every terminal opening to change your session vars
+        Write-Host "JEnv wants to change your system environment vars. Therefore you need to restart it with administration rights. This should only once be required. If you dont want to, you have to call JEnv on every terminal opening to change your session vars"
     }
     $path = $userPath + ";" + $systemPath
 
@@ -109,7 +109,7 @@ if (!($config | Get-Member global)) {
 $localname = ($config.locals | Where-Object { $_.path -eq (Get-Location) }).name
 $javahome = ($config.jenvs | Where-Object { $_.name -eq $localname }).path
 if ($null -eq $local) {
-    $javahome = $config.global 
+    $javahome = $config.global
 }
 $Env:JAVA_HOME = $javahome # Set for powershell users
 if ($output) {
@@ -137,9 +137,9 @@ else {
         remove { Invoke-Remove $config $help @arguments }
         use { Invoke-Use $config $help $output @arguments }
         change { Invoke-Change $config $help $output @arguments }
-        local { Invoke-Local $config $help $output @arguments } 
-        getjava { Get-Java $config } 
-        link { Invoke-Link $config $help @arguments } 
+        local { Invoke-Local $config $help @arguments }
+        getjava { Get-Java $config }
+        link { Invoke-Link $help @arguments }
     }
 
     #region Save the config

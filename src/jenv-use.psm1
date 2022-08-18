@@ -8,9 +8,9 @@ function Invoke-Use {
 
     if ($help) {
         Write-Host '"jenv use <name>"'
-        Write-Host 'With this command you set your JAVA_HOME and the version of java to be used by your current shell session.' 
-        Write-Host '<name> is the alias you asigned to the path with "jenv add <name> <path>"'    
-        Write-Host Careful this overwrites "jenv local"
+        Write-Host 'With this command you set your JAVA_HOME and the version of java to be used by your current shell session.'
+        Write-Host '<name> is the alias you asigned to the path with "jenv add <name> <path>"'
+        Write-Host 'Careful this overwrites "jenv local"'
     }
     else {
 
@@ -20,7 +20,7 @@ function Invoke-Use {
             if ($output) {
                 Set-Content -path "jenv.use.tmp" -value "remove" # Create temp file so no restart of the active shell is required
             }
-            Write-Host Your session JEnv was unset
+            Write-Host "Your session JEnv was unset"
             return
         }
 
@@ -28,7 +28,7 @@ function Invoke-Use {
         # Check if specified JEnv is avaible
         $jenv = $config.jenvs | Where-Object { $_.name -eq $name }
         if ($null -eq $jenv) {
-            Write-Host Theres no JEnv with name $name Consider using "jenv list"
+            Write-Host 'Theres no JEnv with name {0} Consider using "jenv list"' -f  $name
             return
         }
         else {
@@ -38,7 +38,7 @@ function Invoke-Use {
                 Set-Content -path "jenv.home.tmp" -value $jenv.path # Create temp file so no restart of the active shell is required
                 Set-Content -path "jenv.use.tmp" -value $jenv.path # Create temp file so no restart of the active shell is required
             }
-            Write-Host JEnv changed for the current shell session. Careful this overwrites "jenv local"
+            Write-Host 'JEnv changed for the current shell session. Careful this overwrites "jenv local"'
         }
     }
 }
