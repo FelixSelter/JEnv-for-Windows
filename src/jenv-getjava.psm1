@@ -17,7 +17,7 @@ function Get-Java {
     }
     # .java-version file overwrites global and local config
     elseif ($javaVersionFile) {
-        Write-Output $local
+        Write-Output $javaVersionFile
     }
     # Local overwrites global
     elseif ($local) {
