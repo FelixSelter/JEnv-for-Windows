@@ -32,6 +32,7 @@ param (
 )
 
 #region Load all required modules
+Import-Module $PSScriptRoot\util.psm1  # Provides the Open-Prompt function
 Import-Module $PSScriptRoot\jenv-list.psm1 -Force
 Import-Module $PSScriptRoot\jenv-add.psm1 -Force
 Import-Module $PSScriptRoot\jenv-remove.psm1 -Force

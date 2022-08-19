@@ -19,9 +19,6 @@ function Invoke-Uninstall {
             return
         }
 
-        # Provides the Open-Prompt function
-        Import-Module $PSScriptRoot\util.psm1
-
         # Abort Uninstall
         if ((Open-Prompt "Uninstalling JEnv" "Are you sure you want to delete JEnv entirely from this computer?" "Yes", "No" "This will remove JEnv from your computer", "Last chance to abort the disaster" 1) -eq 1) {
             Write-Host "Aborted uninstallation"
