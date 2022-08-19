@@ -47,7 +47,7 @@ Environment var for scripting:
 *jenv change `<name>`*  
 Example: `jenv change jdk15`
 
-5) **Always use this java version in this folder**
+5) **Always use this java version in this folder**  
 *jenv local `<name>`*  
 Example: `jenv local jdk15  `
 
@@ -63,17 +63,17 @@ Example: `jenv list`
 *jenv remove `<name>`*  
 Example: `jenv remove jdk15`
 
-9) **Enable the use of javac, javaw or other executables sitting in the java directory**
+9) **Enable the use of javac, javaw or other executables sitting in the java directory**  
 *jenv link `<Executable name>`*  
 Example: `jenv link javac`
 
-10) **Uninstall jenv and automatically restore a Java version of your choice**
+10) **Uninstall jenv and automatically restore a Java version of your choice**  
 *jenv uninstall `<name>`*  
 Example: `jenv uninstall jdk17`
 
-11) **Automatically search for java versions to be added**
-*jenv autoscan `?<path>?`*
-Example: `jenv autoscan "C:\Program Files\Java"`
+11) **Automatically search for java versions to be added**  
+*jenv autoscan `?<path>?`*  
+Example: `jenv autoscan "C:\Program Files\Java"`  
 Example: `jenv autoscan` // Will search entire system
  ## How does this work?
 This script creates a java.bat file that calls the java.exe with the correct version
