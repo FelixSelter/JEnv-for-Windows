@@ -14,3 +14,12 @@ function Open-Prompt {
 
     return $Host.UI.PromptForChoice($title, $question, $options, $default_choice)
 }
+
+function Get-JavaVersion {
+    param (
+        [Parameter(Mandatory = $true)][string]$javaexe
+    )
+    $version = (Get-Command $javaexe | Select-Object -ExpandProperty Version).toString()
+    $version = $version -replace "(?>\.0)*(?!.+)", "" # Remove trailing zeros
+    return $version
+}
