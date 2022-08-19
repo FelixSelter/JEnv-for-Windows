@@ -1,7 +1,7 @@
 function Invoke-Uninstall {
     param (
-        [Parameter(Mandatory = $true)][boolean]$help,
         [Parameter(Mandatory = $true)][object]$config,
+        [Parameter(Mandatory = $true)][boolean]$help,
         [Parameter(Mandatory = $true)][string]$name
     )
 
