@@ -10,10 +10,10 @@ function Invoke-Link {
         Write-Host '<executable> is the name of the binary file for example "javac" or "javaw"'
         Write-Host 'For example enable javac with: "jenv link javac"'
         Write-Host 'List all registered java versions with "jenv list"'
+        return
     }
-    else {
 
-        $payload = @'
+    $payload = @'
         @echo off
         for /f "delims=" %%i in ('jenv getjava') do set "var=%%i"
 
@@ -25,7 +25,6 @@ function Invoke-Link {
         )
 '@ -f $executable
 
-        Set-Content ((get-item $PSScriptRoot).parent.fullname + "/$executable.bat") $payload
+    Set-Content ((get-item $PSScriptRoot).parent.fullname + "/$executable.bat") $payload
 
-    }
 }
