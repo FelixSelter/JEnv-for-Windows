@@ -16,7 +16,7 @@ IF ERRORLEVEL 1 (
 )
 
 rem ps is the installed powershell
-%ps% -executionpolicy remotesigned -File  %~dp0/src/jenv.ps1 %* --output
+%ps% -executionpolicy remotesigned -File "%~dp0/src/jenv.ps1" %* --output
 
 if exist jenv.home.tmp (
     FOR /F "tokens=* delims=" %%x in (jenv.home.tmp) DO (
