@@ -23,3 +23,15 @@ function Get-JavaVersion {
     $version = $version -replace "(?>\.0)*(?!.+)", "" # Remove trailing zeros
     return $version
 }
+
+function Get-JavaMajorVersion {
+    param (
+        [Parameter(Mandatory = $true)][string]$javaexe
+    )
+    $version = Get-JavaVersion $javaexe
+    $endIndex = $version.IndexOf(".")
+    if ($version.StartsWith("1.")) {
+        $endIndex = $version.IndexOf(".", $endIndex + 1)
+    }
+    return $version.Substring(0, $endIndex)
+}

@@ -48,7 +48,7 @@ function Invoke-AutoScan {
 
     # Ask user if java.exe should be added to the list
     foreach ($java in $javaExecutables) {
-        $version = Get-JavaVersion $java
+        $version = Get-JavaMajorVersion $java
         if ($acceptDefaults) {
             Invoke-Add $config $false $version ($java -replace "\\bin\\java\.exe$", "")
         } else {
