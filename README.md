@@ -72,9 +72,10 @@ Example: `jenv link javac`
 Example: `jenv uninstall jdk17`
 
 11) **Automatically search for java versions to be added**  
-*jenv autoscan `?<path>?`*  
+*jenv autoscan [--yes|-y] `?<path>?`*  
 Example: `jenv autoscan "C:\Program Files\Java"`  
 Example: `jenv autoscan` // Will search entire system
+Example: `jenv autoscan -y "C:\Program Files\Java"` // Will accept defaults
  ## How does this work?
 This script creates a java.bat file that calls the java.exe with the correct version
 When the ps script changes env vars they get exported to tmp files and applied by the batch file

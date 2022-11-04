@@ -26,7 +26,7 @@ function Invoke-Add {
     # Check if name is already used
     foreach ($jenv in $config.jenvs) {
         if ($jenv.name -eq $name) {
-            Write-Output 'Theres already a JEnv with that name. Consider using "jenv list"'
+            Write-Output "Theres already a JEnv with the name $name. Consider using ""jenv list"""
             return
         }
     }
