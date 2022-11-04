@@ -47,7 +47,7 @@ function Invoke-AutoScan {
 
     # Ask user if java.exe should be added to the list
     foreach ($java in $javaExecutables) {
-        $version = Get-JavaVersion $java
+        $version = Get-JavaMajorVersion $java
         switch (Open-Prompt "JEnv autoscan" ("Found java.exe at {0}. Default name is: '{1}'. Do you want to add it to the list?" -f $java, $version) "Yes", "No", "Rename" ("This will add {0} with alias '{1}' to JEnv" -f $java, $version), ("Skip {0}" -f $java), "Change the default name" 1) {
             0 {
                 Invoke-Add $config $false $version ($java -replace "\\bin\\java\.exe$", "")
