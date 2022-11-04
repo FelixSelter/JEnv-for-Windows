@@ -11,12 +11,13 @@ It"s written in cmd and powershell so it can change the enviroment variables and
 # Setup params
 param (
     <#
-    "jenv list"                 List all registered Java-Envs.
-    "jenv add <name> <path>"    Adds a new Java-Version to JEnv which can be refferenced by the given name
-    "jenv remove <name>"        Removes the specified Java-Version from JEnv
-    "jenv change <name>"        Applys the given Java-Version globaly for all restarted shells and this one
-    "jenv use <name>"           Applys the given Java-Version locally for the current shell
-    "jenv local <name>"         Will use the given Java-Version whenever in this folder. Will set the Java-version for all subfolders as well
+    "jenv list"                     List all registered Java-Envs.
+    "jenv add <name> <path>"        Adds a new Java-Version to JEnv which can be refferenced by the given name
+    "jenv remove <name>"            Removes the specified Java-Version from JEnv
+    "jenv change <name>"            Applys the given Java-Version globaly for all restarted shells and this one
+    "jenv use <name>"               Applys the given Java-Version locally for the current shell
+    "jenv local <name>"             Will use the given Java-Version whenever in this folder. Will set the Java-version for all subfolders as well
+    "jenv autoscan <path> [-y]"     Will scan the given path for java installations and ask to add them to JEnv. Path is optional and "--yes|-y" accepts defaults.
     #>
     [Parameter(Position = 0)][validateset("list", "add", "change", "use", "remove", "local", "getjava", "link", "uninstall", "autoscan")] [string]$action,
 
