@@ -52,7 +52,7 @@ Import-Module $PSScriptRoot\jenv-autoscan.psm1 -Force
 
 #region Installation
 # TODO: Check for autoupdates
-$JENV_VERSION = "v2.1.0"
+$JENV_VERSION = "v2.2.0"
 
 #region Remove any java versions from path
 $userPath = [System.Environment]::GetEnvironmentVariable("PATH", "User").split(";", [System.StringSplitOptions]::RemoveEmptyEntries)
