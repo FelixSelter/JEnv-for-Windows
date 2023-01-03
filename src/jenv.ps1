@@ -55,30 +55,34 @@ Import-Module $PSScriptRoot\jenv-autoscan.psm1 -Force
 $JENV_VERSION = "v2.1.0"
 
 #region Remove any java versions from path
-# Get all javas except for our fake java script
-$javaPaths = (Get-Command java -All | Where-Object { $_.source -ne ((get-item $PSScriptRoot).parent.fullname + "\java.bat") }).source
-# Only change something when java versions are found
-if ($javaPaths.Length -gt 0) {
-    Write-Host "JEnv is changing your environment variables. This process could take longer but it happens only when a java executable is found in your path"
-    $userPath = [System.Environment]::GetEnvironmentVariable("PATH", "User").split(";", [System.StringSplitOptions]::RemoveEmptyEntries)
-    $systemPath = [System.Environment]::GetEnvironmentVariable("PATH", "MACHINE").split(";", [System.StringSplitOptions]::RemoveEmptyEntries)
-    # Remove all javas from path
-    $userPath = ($userPath | Where-Object { !$javaPaths.Contains($_ + "\java.exe") } ) -join ";"
-    $systemPath = ($systemPath | Where-Object { !$javaPaths.Contains($_ + "\java.exe") } ) -join ";"
-    [System.Environment]::SetEnvironmentVariable("PATH", $userPath, [System.EnvironmentVariableTarget]::User) # Set globally
+$userPath = [System.Environment]::GetEnvironmentVariable("PATH", "User").split(";", [System.StringSplitOptions]::RemoveEmptyEntries)
+$systemPath = [System.Environment]::GetEnvironmentVariable("PATH", "MACHINE").split(";", [System.StringSplitOptions]::RemoveEmptyEntries)
+# Get all jenvs
+$jenvPaths = (Get-Command jenv -All).source
+# Only change something when jenv versions are found
+if ($jenvPaths.Length -gt 0) {
+    Write-Host "JEnv is changing your environment variables. This process could take longer but it happens only when a jenv executable is found in your path"
+    # Remove all jenvs from path
+    $userPath = ($userPath | Where-Object { !$jenvPaths.Contains($_ + "\jenv.bat") } ) -join ";"
+    $systemPath = ($systemPath | Where-Object { !$jenvPaths.Contains($_ + "\jenv.bat") } ) -join ";"
+}
 
-    try {
-        [System.Environment]::SetEnvironmentVariable("PATH", $systemPath, [System.EnvironmentVariableTarget]::Machine) # Set globally
-    }
-    catch [System.Management.Automation.MethodInvocationException] {
-        Write-Host "JEnv wants to change your system environment vars. Therefore you need to restart it with administration rights. This should only once be required. If you dont want to, you have to call JEnv on every terminal opening to change your session vars"
-    }
-    $path = $userPath + ";" + $systemPath
+# Add JEnv to the beginning of the system path
+$currentJenvPath = (get-item $PSScriptRoot).parent.fullname
+$systemPath = $currentJenvPath + ";" + $systemPath
 
-    $Env:PATH = $path # Set for powershell users
-    if ($output) {
-        Set-Content -path "jenv.path.tmp" -value $path # Create temp file so no restart of the active shell is required
-    }
+[System.Environment]::SetEnvironmentVariable("PATH", $userPath, [System.EnvironmentVariableTarget]::User) # Set globally
+try {
+    [System.Environment]::SetEnvironmentVariable("PATH", $systemPath, [System.EnvironmentVariableTarget]::Machine) # Set globally
+}
+catch [System.Management.Automation.MethodInvocationException] {
+    Write-Host "JEnv wants to change your system environment vars. Therefore you need to restart it with administration rights. This should only once be required. If you dont want to, you have to call JEnv on every terminal opening to change your session vars"
+}
+$path = $systemPath + ";" + $userPath
+
+$Env:PATH = $path # Set for powershell users
+if ($output) {
+    Set-Content -path "jenv.path.tmp" -value $path # Create temp file so no restart of the active shell is required
 }
 #endregion
 
