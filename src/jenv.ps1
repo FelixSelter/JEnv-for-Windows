@@ -52,7 +52,7 @@ Import-Module $PSScriptRoot\jenv-autoscan.psm1 -Force
 
 #region Installation
 # TODO: Check for autoupdates
-$JENV_VERSION = "v2.2.0"
+$JENV_VERSION = "v2.2.1"
 
 #region Remove any java versions from path
 $userPath = [System.Environment]::GetEnvironmentVariable("PATH", "User").split(";", [System.StringSplitOptions]::RemoveEmptyEntries)
@@ -63,9 +63,12 @@ $jenvPaths = (Get-Command jenv -All).source
 if ($jenvPaths.Length -gt 0) {
     Write-Host "JEnv is changing your environment variables. This process could take longer but it happens only when a jenv executable is found in your path"
     # Remove all jenvs from path
-    $userPath = ($userPath | Where-Object { !$jenvPaths.Contains($_ + "\jenv.bat") } ) -join ";"
-    $systemPath = ($systemPath | Where-Object { !$jenvPaths.Contains($_ + "\jenv.bat") } ) -join ";"
+    $userPath = ($userPath | Where-Object { !$jenvPaths.Contains($_ + "\jenv.bat") } )
+    $systemPath = ($systemPath | Where-Object { !$jenvPaths.Contains($_ + "\jenv.bat") } )
 }
+
+$userPath = $userPath -join ";"
+$systemPath = $systemPath -join ";"
 
 # Add JEnv to the beginning of the system path
 $currentJenvPath = (get-item $PSScriptRoot).parent.fullname
