@@ -57,31 +57,76 @@ $JENV_VERSION = "v2.2.1"
 #region Remove any java versions from path
 $userPath = [System.Environment]::GetEnvironmentVariable("PATH", "User").split(";", [System.StringSplitOptions]::RemoveEmptyEntries)
 $systemPath = [System.Environment]::GetEnvironmentVariable("PATH", "MACHINE").split(";", [System.StringSplitOptions]::RemoveEmptyEntries)
-# Get all jenvs
-$jenvPaths = (Get-Command jenv -All).source
-# Only change something when jenv versions are found
-if ($jenvPaths.Length -gt 0) {
-    Write-Host "JEnv is changing your environment variables. This process could take longer but it happens only when a jenv executable is found in your path"
-    # Remove all jenvs from path
-    $userPath = ($userPath | Where-Object { !$jenvPaths.Contains($_ + "\jenv.bat") } )
-    $systemPath = ($systemPath | Where-Object { !$jenvPaths.Contains($_ + "\jenv.bat") } )
+
+
+# Windows will check the PATH environment variable for java executables.
+# But actually there are two different PATHs.
+# The first one is set by the administrator of the machine and cannot be edited by the user. It is used for global shared software
+# The second one can be set by the user. It is used for individual software
+# Jenv needs to ensure that its dummy java.bat script is the first one to be found by windows
+# When searching for an executable, windows checks the systems PATH first and the users afterwards
+$javaPaths = (Get-Command java -All).source
+$root = (get-item $PSScriptRoot).parent.fullname
+$dummyScript = ("{0}\java.bat" -f $root)
+if ($javaPaths.IndexOf($dummyScript) -eq -1) {
+    $wrongJavaPaths = $javaPaths
+}
+else {
+    $wrongJavaPaths = ($javaPaths | Select-Object -SkipLast ($javaPaths.Length - $javaPaths.IndexOf($dummyScript)))
 }
 
-$userPath = $userPath -join ";"
-$systemPath = $systemPath -join ";"
+# Remove all javas from system path
+foreach ($java in $wrongJavaPaths) {
+    if ($systemPath.Contains((get-item $java).Directory.FullName)) {
+        # Filter out any existing JEnv
+        $systemPath = ($systemPath | Where-Object { !($_ -eq $root) })
+        # Prepend JEnv
+        $systemPath = , $root + $systemPath
 
-# Add JEnv to the beginning of the system path
-$currentJenvPath = (get-item $PSScriptRoot).parent.fullname
-$systemPath = $currentJenvPath + ";" + $systemPath
+        Write-Host ("JEnv found a java executable in your machines PATH environment variable.`nJEnv places a dummy java executable inside your PATH to work properly.`nTherefore you need to manually remove any other java executable from the PATH.`nOptionally you could also put '{0}' at the top of your machines PATH" -f $root)
+        switch (Open-Prompt "JEnv install" "Would you like to append JEnv to the start of your machines path? (This operation requires administrator rights!)" "Yes", "No" ("Append JEnv ({0}) to the start of your machines PATH environment variable" -f $root), "Abort and exit the script" 1) {
+            0 {
+                Write-Host "Ok. This could take a few seconds"
+                # Write to PATH
+                try {
+                    [System.Environment]::SetEnvironmentVariable("PATH", $systemPath -join ";", [System.EnvironmentVariableTarget]::Machine) # Set globally
+                }
+                catch [System.Management.Automation.MethodInvocationException] {
+                    Write-Host "JEnv wants to change your system environment vars. Therefore you need to restart it with administration rights. This should only once be required. If you do not want to, you have to call JEnv on every terminal opening to change your session vars"
+                }
+            }
+            1 {
+                Write-Host "Aborted. The PATH will only be modified for this shell session. You should consider changing the PATH manually"
+            }
+        }
+        # Its fine to break here. If we already put something in the machines path we do not need to change the users path as windows checks the machines path first
+        break
+    }
 
-[System.Environment]::SetEnvironmentVariable("PATH", $userPath, [System.EnvironmentVariableTarget]::User) # Set globally
-try {
-    [System.Environment]::SetEnvironmentVariable("PATH", $systemPath, [System.EnvironmentVariableTarget]::Machine) # Set globally
+    # This block only executes if no java was found in the systems path. Because the paths array contains the machine elements followed by the user elements.
+    if ($userPath.Contains((get-item $java).Directory.FullName)) {
+        # Filter out any existing JEnv
+        $userPath = ($userPath | Where-Object { !($_ -eq $root) })
+        # Prepend JEnv
+        $userPath = , $root + $userPath
+
+        Write-Host ("JEnv found a java executable in your users PATH environment variable.`nJEnv places a dummy java executable inside your PATH to work properly.`nTherefore you need to manually remove any other java executable from the PATH.`nOptionally you could also put '{0}' at the top of your users PATH" -f $root)
+        switch (Open-Prompt "JEnv install" "Would you like to append JEnv to the start of your users path?" "Yes", "No" ("Append JEnv ({0}) to the start of your users PATH environment variable" -f $root), "Abort and exit the script" 1) {
+            0 {
+                Write-Host "Ok. This could take a few seconds"
+                # Write to PATH
+                [System.Environment]::SetEnvironmentVariable("PATH", $userPath -join ";", [System.EnvironmentVariableTarget]::User) # Set globally
+            }
+            1 {
+                Write-Host "Aborted. The PATH will only be modified for this shell session. You should consider changing the PATH manually"
+            }
+        }
+        break
+    }
+
 }
-catch [System.Management.Automation.MethodInvocationException] {
-    Write-Host "JEnv wants to change your system environment vars. Therefore you need to restart it with administration rights. This should only once be required. If you dont want to, you have to call JEnv on every terminal opening to change your session vars"
-}
-$path = $systemPath + ";" + $userPath
+
+$path = ($systemPath + $userPath) -join ";"
 
 $Env:PATH = $path # Set for powershell users
 if ($output) {
