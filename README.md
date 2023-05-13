@@ -24,6 +24,9 @@ I hope you enjoy it. Please give me a star if you like my work. Thank you!
 5) **Some reported problems putting JEnv into their C:/Programs folder due to required admin rights**
 6) **I hope I could help you. Else open an issue**
 
+## Warning:
+Sometimes its necessary to call jenv when entering a new directory with a local jenv specified. This will set your JAVA_HOME for the current shell and ensures that tools like maven work properly
+
 ## Usage (Note: local overwrites change. use overwrites local)
 1) **Add a new Java  environment (requires absolute path)**  
 *jenv add `<name> <path>`*  
