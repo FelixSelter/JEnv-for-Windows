@@ -5,6 +5,8 @@ function Get-Java {
     )
 
     $global = $config.global
+    $javaVersionFileName = Get-Content .\.java-version
+    $javaVersionFile = ($config.jenvs | Where-Object { $_.name -eq $javaVersionFileName }).path
     $localname = ($config.locals | Where-Object { $_.path -eq (Get-Location) }).name
     $local = ($config.jenvs | Where-Object { $_.name -eq $localname }).path
     $use = $Env:JENVUSE
@@ -12,6 +14,10 @@ function Get-Java {
     # Use command overwrites everything
     if ($use) {
         Write-Output $use
+    }
+    # .java-version file overwrites global and local config
+    elseif ($javaVersionFile) {
+        Write-Output $javaVersionFile
     }
     # Local overwrites global
     elseif ($local) {
