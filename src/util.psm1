@@ -19,8 +19,8 @@ function Get-JavaVersion {
     param (
         [Parameter(Mandatory = $true)][string]$javaexe
     )
-    $version = (Get-Command $javaexe | Select-Object -ExpandProperty Version).toString()
-    $version = $version -replace "(?>\.0)*(?!.+)", "" # Remove trailing zeros
+    # https://learn.microsoft.com/en-us/dotnet/api/system.version.tostring?view=netcore-1.0#system-version-tostring(system-int32)
+    $version = (Get-Command $javaexe | Select-Object -ExpandProperty Version).toString(3)
     return $version
 }
 
@@ -29,6 +29,9 @@ function Get-JavaMajorVersion {
         [Parameter(Mandatory = $true)][string]$javaexe
     )
     $version = Get-JavaVersion $javaexe
+    if ("0.0.0" -eq $version) {
+        return $null
+    }
     $endIndex = $version.IndexOf(".")
     if ($version.StartsWith("1.")) {
         $endIndex = $version.IndexOf(".", $endIndex + 1)
