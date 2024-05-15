@@ -1,0 +1,43 @@
+#!/bin/bash
+
+# Check if PowerShell is in PATH
+if ! command -v pwsh &> /dev/null; then
+    if ! command -v powershell &> /dev/null; then
+        echo "Neither pwsh.exe nor powershell.exe was found in your PATH."
+        echo "Please install PowerShell as it is required."
+        exit 1
+    else
+        ps=powershell
+    fi
+else
+    ps=pwsh
+fi
+
+# Execute PowerShell script with required options
+"$ps" -executionpolicy remotesigned -File "$(dirname "$0")/src/jenv.ps1" "$@" --output
+
+# Process temporary files
+if [ -f jenv.home.tmp ]; then
+    while IFS= read -r line; do
+        JAVA_HOME=$line
+    done < jenv.home.tmp
+    "C:\Program Files\Git\usr\bin\rm" -f jenv.home.tmp
+fi
+
+if [ -f jenv.path.tmp ]; then
+    while IFS= read -r line; do
+        PATH=$line
+    done < jenv.path.tmp
+    "C:\Program Files\Git\usr\bin\rm" -f jenv.path.tmp
+fi
+
+if [ -f jenv.use.tmp ]; then
+    while IFS= read -r line; do
+        if [ "$line" == "remove" ]; then
+            unset JENVUSE
+        else
+            JENVUSE=$line
+        fi
+    done < jenv.use.tmp
+    "C:\Program Files\Git\usr\bin\rm" -f jenv.use.tmp
+fi
