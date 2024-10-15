@@ -9,7 +9,7 @@ function Invoke-Use {
     if ($help) {
         Write-Host '"jenv use <name>"'
         Write-Host 'With this command you set your JAVA_HOME and the version of java to be used by your current shell session.'
-        Write-Host '<name> is the alias you asigned to the path with "jenv add <name> <path>"'
+        Write-Host '<name> is the alias you assigned to the path with "jenv add <name> <path>"'
         Write-Host 'Careful this overwrites "jenv local"'
         return
     }

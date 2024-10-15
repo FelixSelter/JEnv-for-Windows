@@ -14,7 +14,7 @@ function Invoke-List {
         return
     }
 
-    Write-Host "All avaible versions of java"
+    Write-Host "All available versions of java"
     Write-Host ($config.jenvs | Format-Table | Out-String)
     Write-Host "All locally specified versions"
     Write-Host ($config.locals | Format-Table | Out-String)
